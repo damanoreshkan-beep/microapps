@@ -6,7 +6,7 @@
     "refetch": true,
     "defaults": { "tags": "front_page" },
     "controls": [
-      { "type": "segment", "key": "tags", "label": "fFeed", "icon": "lucide:newspaper", "refetch": true,
+      { "type": "segment", "key": "tags", "label": "fFeed", "icon": "lucide:newspaper", "refetch": true, "chip": true,
         "options": [["front_page", "fTop"], ["story", "fNew"], ["ask_hn", "fAsk"], ["show_hn", "fShow"]] }
     ]
   },

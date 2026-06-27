@@ -1,0 +1,80 @@
+{
+  "id": "gh",
+  "theme": "dim",
+  "fav": { "key": "id" },
+  "filters": {
+    "refetch": true,
+    "defaults": { "since": "week", "lang": "all" },
+    "controls": [
+      { "type": "segment", "key": "since", "label": "fSince", "icon": "lucide:calendar", "refetch": true, "chip": true,
+        "options": [["day", "sinceDay"], ["week", "sinceWeek"], ["month", "sinceMonth"]] },
+      { "type": "segment", "key": "lang", "label": "fLang", "icon": "lucide:code", "refetch": true, "chip": true,
+        "options": [["all", "langAll"], ["JavaScript", "JS"], ["Python", "Python"], ["Rust", "Rust"], ["Go", "Go"]] }
+    ]
+  },
+  "profile": { "icon": "lucide:github", "theme": true, "lang": true, "install": true, "source": { "label": "profSource", "url": "https://github.com/", "icon": "lucide:database" } },
+  "tabs": [
+    {
+      "id": "feed", "type": "list", "icon": "lucide:trending-up", "label": "tabFeed",
+      "search": true, "searchKey": "search", "statusKey": "status",
+      "card": {
+        "layout": "feed", "href": "link", "title": "name", "more": "open",
+        "body": "desc", "meta": { "field": "ts", "format": "ago" },
+        "badges": [
+          { "field": "stars", "icon": "lucide:star", "variant": "success" },
+          { "field": "lang", "icon": "lucide:circle", "variant": "ghost" },
+          { "field": "forks", "icon": "lucide:git-fork", "variant": "ghost" }
+        ]
+      }
+    },
+    {
+      "id": "saved", "type": "list", "icon": "lucide:bookmark", "label": "tabSaved", "source": "fav",
+      "titleKey": "tabSaved", "search": true, "searchKey": "searchSaved",
+      "empty": { "icon": "lucide:bookmark", "text": "emptySaved", "hint": "emptySavedHint" },
+      "card": {
+        "layout": "feed", "href": "link", "title": "name", "more": "open",
+        "body": "desc", "meta": { "field": "ts", "format": "ago" },
+        "badges": [
+          { "field": "stars", "icon": "lucide:star", "variant": "success" },
+          { "field": "lang", "icon": "lucide:circle", "variant": "ghost" },
+          { "field": "forks", "icon": "lucide:git-fork", "variant": "ghost" }
+        ]
+      }
+    },
+    { "id": "me", "type": "profile", "icon": "lucide:user", "label": "tabMe", "titleKey": "tabMe" }
+  ],
+  "i18n": {
+    "uk": {
+      "title": "GitHub Trending", "tabFeed": "Тренди", "tabSaved": "Збережені", "tabMe": "Я",
+      "search": "Пошук репозиторію…", "searchSaved": "Шукати у збережених…",
+      "status": "GitHub · популярне зараз", "statusLoading": "Оновлення…", "statusError": "Дані недоступні", "savedCount": "{n} збережено",
+      "open": "Відкрити", "more": "Відкрити",
+      "noResults": "Нічого не знайдено", "noResultsHint": "Спробуй інший запит або період", "errorHint": "Перевір зʼєднання та онови",
+      "emptySaved": "Ще нічого не збережено", "emptySavedHint": "Тисни закладку на картці, щоб зберегти репозиторій сюди",
+      "favAria": "Зберегти репозиторій", "unfavAria": "Прибрати зі збережених",
+      "fSince": "Період", "sinceDay": "День", "sinceWeek": "Тиждень", "sinceMonth": "Місяць", "fLang": "Мова", "langAll": "Всі",
+      "filterTitle": "Фільтр", "apply": "Застосувати", "ariaFilter": "Фільтр",
+      "agoToday": "сьогодні", "agoYesterday": "вчора", "agoDays": "{n} дн. тому", "agoWeeks": "{n} тиж. тому",
+      "profTheme": "Темна тема", "profLang": "Мова", "profTagline": "Популярні репозиторії GitHub", "profSource": "Джерело — github.com",
+      "install": "Встановити застосунок", "installTitle": "Встановлення", "installBtn": "Встановити", "installDesc": "Працює офлайн, відкривається як застосунок",
+      "installIosHint": "У Safari: натисни «Поділитися», далі «На початковий екран».", "installGenericHint": "У меню браузера обери «Встановити» або «Додати на головний екран».",
+      "close": "Закрити", "refresh": "Оновити", "toastSaved": "Збережено", "toastRemoved": "Видалено зі збережених"
+    },
+    "en": {
+      "title": "GitHub Trending", "tabFeed": "Trending", "tabSaved": "Saved", "tabMe": "Me",
+      "search": "Search a repo…", "searchSaved": "Search saved…",
+      "status": "GitHub · popular now", "statusLoading": "Updating…", "statusError": "Data unavailable", "savedCount": "{n} saved",
+      "open": "Open", "more": "Open",
+      "noResults": "Nothing found", "noResultsHint": "Try another query or period", "errorHint": "Check connection and refresh",
+      "emptySaved": "Nothing saved yet", "emptySavedHint": "Tap the bookmark on a card to save a repo here",
+      "favAria": "Save repository", "unfavAria": "Remove from saved",
+      "fSince": "Period", "sinceDay": "Day", "sinceWeek": "Week", "sinceMonth": "Month", "fLang": "Language", "langAll": "All",
+      "filterTitle": "Filter", "apply": "Apply", "ariaFilter": "Filter",
+      "agoToday": "today", "agoYesterday": "yesterday", "agoDays": "{n}d ago", "agoWeeks": "{n}w ago",
+      "profTheme": "Dark theme", "profLang": "Language", "profTagline": "Popular GitHub repositories", "profSource": "Source — github.com",
+      "install": "Install app", "installTitle": "Install", "installBtn": "Install", "installDesc": "Works offline, opens like an app",
+      "installIosHint": "In Safari: tap Share, then 'Add to Home Screen'.", "installGenericHint": "In your browser menu choose 'Install' or 'Add to Home Screen'.",
+      "close": "Close", "refresh": "Refresh", "toastSaved": "Saved", "toastRemoved": "Removed from saved"
+    }
+  }
+}
