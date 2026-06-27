@@ -1,0 +1,43 @@
+{
+  "id": "crypto",
+  "theme": "dim",
+  "fav": { "key": "sym" },
+  "profile": { "icon": "lucide:bitcoin", "theme": true, "lang": true, "install": true, "source": { "label": "profSource", "url": "https://www.coingecko.com/", "icon": "lucide:database" } },
+  "tabs": [
+    {
+      "id": "coins", "type": "list", "icon": "lucide:coins", "label": "tabCoins",
+      "search": true, "statusKey": "status", "searchKey": "search",
+      "sections": [
+        { "filter": "fav", "icon": "lucide:star", "label": "favSection" },
+        { "filter": "!fav", "icon": "lucide:bitcoin", "label": "allSection" }
+      ],
+      "card": { "layout": "row", "lead": "sym", "title": "name", "trailing": "price", "unit": "$", "trend": "chg" }
+    },
+    { "id": "convert", "type": "converter", "icon": "lucide:arrow-right-left", "label": "tabConvert", "titleKey": "tabConvert", "codeField": "sym", "rateField": "price", "base": "USD", "defaultFrom": "BTC", "defaultTo": "USD", "quick": ["0.1", "1", "10", "100"] },
+    { "id": "me", "type": "profile", "icon": "lucide:user", "label": "tabMe", "titleKey": "tabMe" }
+  ],
+  "i18n": {
+    "uk": {
+      "title": "Крипто", "tabCoins": "Монети", "tabConvert": "Конвертер", "tabMe": "Я",
+      "search": "Пошук монети…", "status": "Ціни в USD · топ за капіталізацією", "statusLoading": "Оновлення…", "statusError": "Дані недоступні",
+      "favSection": "Обрані", "allSection": "Усі монети",
+      "noResults": "Монету не знайдено", "noResultsHint": "Спробуй інший тікер або назву", "errorHint": "Перевір зʼєднання та онови",
+      "favAria": "Додати в обрані", "unfavAria": "Прибрати з обраних", "swap": "Поміняти місцями", "perUnit2": "1 {a} = {rate} {b}",
+      "profTheme": "Темна тема", "profLang": "Мова", "profTagline": "Курси криптовалют у USD", "profSource": "Джерело — coingecko.com",
+      "install": "Встановити застосунок", "installTitle": "Встановлення", "installBtn": "Встановити", "installDesc": "Працює офлайн, відкривається як застосунок",
+      "installIosHint": "У Safari: натисни «Поділитися», далі «На початковий екран».", "installGenericHint": "У меню браузера обери «Встановити» або «Додати на головний екран».",
+      "close": "Закрити", "refresh": "Оновити", "toastSaved": "Додано в обрані", "toastRemoved": "Прибрано з обраних"
+    },
+    "en": {
+      "title": "Crypto", "tabCoins": "Coins", "tabConvert": "Converter", "tabMe": "Me",
+      "search": "Search coin…", "status": "Prices in USD · top by market cap", "statusLoading": "Updating…", "statusError": "Data unavailable",
+      "favSection": "Favorites", "allSection": "All coins",
+      "noResults": "Coin not found", "noResultsHint": "Try another ticker or name", "errorHint": "Check connection and refresh",
+      "favAria": "Add to favorites", "unfavAria": "Remove from favorites", "swap": "Swap", "perUnit2": "1 {a} = {rate} {b}",
+      "profTheme": "Dark theme", "profLang": "Language", "profTagline": "Crypto prices in USD", "profSource": "Source — coingecko.com",
+      "install": "Install app", "installTitle": "Install", "installBtn": "Install", "installDesc": "Works offline, opens like an app",
+      "installIosHint": "In Safari: tap Share, then 'Add to Home Screen'.", "installGenericHint": "In your browser menu choose 'Install' or 'Add to Home Screen'.",
+      "close": "Close", "refresh": "Refresh", "toastSaved": "Added to favorites", "toastRemoved": "Removed from favorites"
+    }
+  }
+}
