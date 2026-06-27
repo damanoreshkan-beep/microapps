@@ -1,0 +1,58 @@
+// DOU data adapter. Returns { items (tagged bron), meta:{bron,rest,categories} }.
+const PROXIES = [
+  (u) => `/feed?url=${encodeURIComponent(u)}`,
+  (u) => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+  (u) => `https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(u)}`,
+];
+const PAGE = "https://jobs.dou.ua/vacancies/";
+const SEARCH = "&search=%D0%B1%D1%80%D0%BE%D0%BD%D1%8E%D0%B2%D0%B0%D0%BD%D0%BD%D1%8F";
+const feedBase = (c) => "https://jobs.dou.ua/vacancies/feeds/?category=" + encodeURIComponent(c);
+const TECH = ["React", "Vue", "Nuxt", "Next", "Angular", "Svelte", "TypeScript", "JavaScript", "Node", "Astro", "RxJS", "Pinia", "Redux", "GraphQL", "Tailwind"];
+
+async function via(url) {
+  let err;
+  for (const w of PROXIES) {
+    const c = new AbortController(), t = setTimeout(() => c.abort(), 10000);
+    try { const r = await fetch(w(url), { signal: c.signal }); if (!r.ok) throw 0; const x = await r.text(); if (x && (x.includes("<item") || x.includes("<option"))) return x; throw 0; }
+    catch (e) { err = e; } finally { clearTimeout(t); }
+  }
+  throw err;
+}
+function parseTitle(t) {
+  const i = t.indexOf(" в ");
+  let position = t.trim(), company = "", locs = [];
+  if (i >= 0) { position = t.slice(0, i).trim(); const r = t.slice(i + 3).split(",").map((s) => s.trim()).filter(Boolean); company = r.shift() || ""; locs = r; }
+  const remote = /віддален|remote/i.test(t), abroad = /за кордоном/i.test(t);
+  const salary = (t.match(/\$\s?[\d\s.–-]*\d|\d[\d\s]*грн/) || [])[0] || "";
+  const city = locs.find((l) => !/\$|грн|віддален|remote|за кордоном/i.test(l)) || "";
+  return { position, company, city, remote, abroad, salary };
+}
+function parse(xml, bron) {
+  const d = new DOMParser().parseFromString(xml, "text/xml");
+  return [...d.querySelectorAll("item")].map((it) => {
+    const g = (s) => it.querySelector(s)?.textContent?.trim() || "";
+    const tmp = document.createElement("div"); tmp.innerHTML = g("description");
+    const desc = tmp.textContent.replace(/\s+/g, " ").trim();
+    const m = parseTitle(g("title"));
+    const tech = TECH.filter((k) => new RegExp("\\b" + k.replace("+", "\\+"), "i").test(m.position + " " + desc)).slice(0, 3);
+    return { ...m, link: g("link"), bron, tech, desc: desc.slice(0, 150), ts: new Date(g("pubDate")).getTime() };
+  });
+}
+let _cats = null;
+async function cats() {
+  if (_cats) return _cats;
+  try { const doc = new DOMParser().parseFromString(await via(PAGE), "text/html"); _cats = [...doc.querySelectorAll('select[name="category"] option')].map((o) => ({ v: o.value, l: o.textContent.trim() })); }
+  catch (e) { _cats = []; }
+  return _cats;
+}
+export async function load(filters) {
+  const cat = filters.category || "Front End";
+  const ex = filters.exp ? "&exp=" + filters.exp : "";
+  const [b, a, c] = await Promise.allSettled([via(feedBase(cat) + SEARCH + ex), via(feedBase(cat) + ex), cats()]);
+  const bronL = b.status === "fulfilled" ? parse(b.value, true) : [];
+  const all = a.status === "fulfilled" ? parse(a.value, false) : [];
+  if (b.status !== "fulfilled" && a.status !== "fulfilled") throw new Error("feeds");
+  const seen = new Set(bronL.map((j) => j.link));
+  const rest = all.filter((j) => !seen.has(j.link));
+  return { items: [...bronL, ...rest], meta: { bron: bronL.length, rest: rest.length, categories: c.status === "fulfilled" ? c.value : [] } };
+}
