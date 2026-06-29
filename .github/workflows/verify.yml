@@ -1,12 +1,12 @@
 name: verify
 
-# The gate. Runs the harness (e2e + design checks) for every app in the farm on a clean Ubuntu
-# runner — the stable home for headed Chromium that the local proot env never was. Also generates
-# the PWA icons here (Chromium canvas) so NOTHING needs Chromium on the device. Local cycle is
-# browser-free: build + `deno eval` spec-validate + push; CI is the gate.
+# The gate, optimised: only the changed apps are verified on a PR (full farm when the runtime/skill/
+# workflow changes or on manual dispatch), each app in its own parallel matrix job with a warm deno
+# cache, and screenshots only for the apps actually verified. Runtime is off-device — CI is the gate.
 
 on:
   push:
+    branches: [main, "**"]
   pull_request:
   workflow_dispatch:
 
@@ -15,85 +15,109 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: write   # commit regenerated icons back to the feature branch
+  contents: write   # icons commit-back to the feature branch
 
 jobs:
-  verify:
+  # Detect which apps to verify + run the fast browser-free unit tests once.
+  changes:
     runs-on: ubuntu-latest
+    outputs:
+      apps: ${{ steps.detect.outputs.apps }}
     steps:
-      - name: Checkout farm + skill submodule
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
+          fetch-depth: 0
           submodules: recursive
-          token: ${{ secrets.SKILL_TOKEN }}   # PAT: reads private submodule + pushes icons
-
-      - name: Install Deno
-        uses: denoland/setup-deno@v2
+          token: ${{ secrets.SKILL_TOKEN }}
+      - uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
-
-      - name: Unit tests (pure logic, no browser — fails fast before the gate)
-        # Dep-free tests only. (skill/runtime/validate_test.js is local-only — it reads farm specs by
-        # an absolute /root path; fix its paths before adding it here.)
+      - name: Unit tests (pure logic, no browser)
         run: deno test skill/runtime/pure_test.ts flashlight/morse_test.js
+      - name: Detect changed apps
+        id: detect
+        run: |
+          all_apps() { for d in */; do [ -f "${d}spec.json" ] && [ -f "${d}e2e.spec.mjs" ] && echo "${d%/}"; done; }
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git fetch -q origin "${{ github.base_ref }}"
+            CHANGED=$(git diff --name-only "origin/${{ github.base_ref }}...HEAD")
+          else
+            CHANGED=$(git diff --name-only HEAD~1 HEAD 2>/dev/null || all_apps | sed 's#$#/spec.json#')
+          fi
+          echo "changed files:"; echo "$CHANGED"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || echo "$CHANGED" | grep -qE '^(skill|\.github/|deploy/)'; then
+            APPS=$(all_apps)                                   # runtime/infra change or manual → whole farm
+          else
+            APPS=$(echo "$CHANGED" | grep -oE '^[^/]+/' | sort -u | sed 's#/##' \
+              | while read -r d; do [ -f "$d/spec.json" ] && [ -f "$d/e2e.spec.mjs" ] && echo "$d"; done)
+          fi
+          JSON=$(echo "$APPS" | grep -v '^$' | jq -R . | jq -cs .)
+          echo "apps to verify → $JSON"
+          echo "apps=$JSON" >> "$GITHUB_OUTPUT"
 
-      - name: Install Chrome
+  # Regenerate PWA icons for the changed apps and commit them back (single job → no parallel git races).
+  icons:
+    needs: changes
+    if: needs.changes.outputs.apps != '[]' && github.event_name == 'push' && github.ref_name != 'main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { submodules: recursive, token: "${{ secrets.SKILL_TOKEN }}" }
+      - uses: denoland/setup-deno@v2
+        with: { deno-version: v2.x }
+      - uses: browser-actions/setup-chrome@v1
         id: chrome
-        uses: browser-actions/setup-chrome@v1
-        with:
-          chrome-version: stable
-
-      - name: Install Xvfb + fonts
-        run: sudo apt-get update && sudo apt-get install -y xvfb fonts-liberation
-
-      - name: Generate PWA icons (Chromium on the runner, never locally)
-        env:
-          DISPLAY: ":99"
-          DISPLAY_NUM: "99"
-          CHROMIUM_PATH: ${{ steps.chrome.outputs.chrome-path }}
+        with: { chrome-version: stable }
+      - run: sudo apt-get update && sudo apt-get install -y xvfb fonts-liberation
+      - name: Generate icons for changed apps
+        env: { DISPLAY: ":99", DISPLAY_NUM: "99", CHROMIUM_PATH: "${{ steps.chrome.outputs.chrome-path }}" }
         run: |
           deno task -c skill/harness/deno.json setup
-          for d in */ ; do
-            if [ -f "${d}spec.json" ] && [ -f "${d}brand.svg" ]; then
-              echo "icons: ${d%/}"
-              deno task -c skill/harness/deno.json icons "$GITHUB_WORKSPACE/${d%/}"
-            fi
+          for app in $(echo '${{ needs.changes.outputs.apps }}' | jq -r '.[]'); do
+            [ -f "$app/brand.svg" ] && deno task -c skill/harness/deno.json icons "$GITHUB_WORKSPACE/$app"
           done
-
-      - name: Commit regenerated icons to the branch
-        # Only on a feature-branch push (main is protected/PR-only; PR events run on a detached merge ref).
-        if: github.event_name == 'push' && github.ref_name != 'main'
-        run: |
-          git config user.name  "github-actions[bot]"
+          git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A                       # only icon files change before check-all (catches new/untracked too)
-          if git diff --cached --quiet; then
-            echo "icons unchanged — nothing to commit"
-          else
+          git add -A
+          if ! git diff --cached --quiet; then
             git commit -m "ci: regenerate PWA icons [skip ci]"
             git push origin "HEAD:${{ github.ref_name }}"
           fi
 
-      # The human-eye gate: on PR/dispatch, check-all also writes states/main.png for every app —
-      # populated (verify settles + polls until the data skeletons clear), unlike a bare shot that
-      # races the fetch. Uploaded as an artifact so a human (me via `gh run download` + viewing, and
-      # the user on-device) judges the actual UX — the aesthetic call the mechanical checks can't make.
-      - name: Verify whole farm (check-all) + populated screenshots on PR
-        env:
-          DISPLAY: ":99"
-          DISPLAY_NUM: "99"
-          CHROMIUM_PATH: ${{ steps.chrome.outputs.chrome-path }}
+  # One parallel job per changed app: e2e + design gate, plus a populated screenshot on PR/dispatch.
+  verify:
+    needs: changes
+    if: needs.changes.outputs.apps != '[]'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        app: ${{ fromJSON(needs.changes.outputs.apps) }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { submodules: recursive, token: "${{ secrets.SKILL_TOKEN }}" }
+      - uses: denoland/setup-deno@v2
+        with: { deno-version: v2.x }
+      - name: Cache deno deps
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/deno
+          key: deno-${{ hashFiles('skill/**/deno.lock') }}
+          restore-keys: deno-
+      - uses: browser-actions/setup-chrome@v1
+        id: chrome
+        with: { chrome-version: stable }
+      - run: sudo apt-get update && sudo apt-get install -y xvfb fonts-liberation
+      - name: Verify ${{ matrix.app }}
+        env: { DISPLAY: ":99", DISPLAY_NUM: "99", CHROMIUM_PATH: "${{ steps.chrome.outputs.chrome-path }}" }
         run: |
           SHOTS=""
           case "${{ github.event_name }}" in pull_request|workflow_dispatch) SHOTS="--shots" ;; esac
-          deno task -c skill/harness/deno.json check-all "$GITHUB_WORKSPACE" $SHOTS
-
-      - name: Upload screenshots (populated) for human-eye review
+          deno task -c skill/harness/deno.json verify "$GITHUB_WORKSPACE/${{ matrix.app }}" $SHOTS
+      - name: Upload screenshot
         if: always() && (github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch')
         uses: actions/upload-artifact@v4
         with:
-          name: screenshots
-          path: |
-            */states/main.png
-            */states/last.png
+          name: shot-${{ matrix.app }}
+          path: ${{ matrix.app }}/states/main.png
           if-no-files-found: warn
