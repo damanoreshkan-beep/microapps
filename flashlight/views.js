@@ -39,12 +39,12 @@ export function LightView({ t }) {
 
   return html`<div class="relative flex flex-col items-center justify-center" style="height:calc(100dvh - 8.5rem)">
     ${screenFlash ? html`<div class="fixed inset-0 z-30 transition-opacity duration-75" style=${`background:#fff;opacity:${lit ? 1 : 0}`} onClick=${powerOff}></div>` : null}
-    <div class=${`relative z-40 flex flex-col items-center gap-6 px-8 text-center ${screenFlash ? "bg-base-100/85 backdrop-blur rounded-3xl py-8" : ""}`}>
+    <div class=${`relative z-40 flex flex-col items-center gap-6 px-4 text-center ${screenFlash ? "bg-base-100/85 backdrop-blur rounded-3xl py-8" : ""}`}>
       <div class=${`rounded-full p-8 transition-colors ${on && lit ? "bg-warning/20" : "bg-base-300"}`}>${Icon("lucide:flashlight", `text-7xl ${on && lit ? "text-warning" : "text-base-content/50"}`)}</div>
       <div><div class="font-bold text-xl">${T(t, on ? "on" : "off")}</div>
         ${on ? html`<div class="text-sm text-base-content/70 mt-1">${T(t, mode === "torch" ? "modeTorch" : "modeScreen")}</div>` : (!secure ? html`<div class="text-sm text-warning/80 mt-1">${T(t, "modeScreen")}</div>` : null)}</div>
-      <button id="fl-power" class=${`btn btn-lg rounded-2xl gap-2 ${on ? "btn-warning" : "btn-primary"}`} onClick=${on ? powerOff : powerOn}>${Icon(on ? "lucide:power-off" : "lucide:power")}${T(t, on ? "turnOff" : "turnOn")}</button>
-      ${on ? html`<button id="fl-sos" class=${`btn rounded-2xl gap-2 ${sos ? "btn-error" : "btn-ghost bg-base-200"}`} onClick=${toggleSos}>${Icon("lucide:siren")}${T(t, "sos")}</button>
+      <button id="fl-power" class=${`btn btn-lg max-w-full rounded-2xl gap-2 ${on ? "btn-warning" : "btn-primary"}`} onClick=${on ? powerOff : powerOn}>${Icon(on ? "lucide:power-off" : "lucide:power")}${T(t, on ? "turnOff" : "turnOn")}</button>
+      ${on ? html`<button id="fl-sos" class=${`btn max-w-full rounded-2xl gap-2 ${sos ? "btn-error" : "btn-ghost bg-base-200"}`} onClick=${toggleSos}>${Icon("lucide:siren")}${T(t, "sos")}</button>
         <div class="text-xs text-base-content/60">${sos ? T(t, "sosNote") : (screenFlash ? T(t, "tapOff") : "")}</div>` : null}
     </div>
   </div>`;
