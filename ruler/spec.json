@@ -1,0 +1,35 @@
+{
+  "id": "ruler",
+  "theme": "dim",
+  "profile": { "icon": "lucide:ruler", "theme": true, "lang": true, "install": true },
+  "tabs": [
+    { "id": "ruler", "type": "tool", "view": "ruler", "needs": ["haptic"], "icon": "lucide:ruler", "label": "tabRuler", "titleKey": "title" },
+    { "id": "me", "type": "profile", "icon": "lucide:settings", "label": "tabMe", "titleKey": "tabMe" }
+  ],
+  "i18n": {
+    "uk": {
+      "title": "Лінійка", "tabRuler": "Лінійка", "tabMe": "Налаштування",
+      "rulerHint": "Притисни предмет до екрана та потягни маркер",
+      "calibrate": "Калібрування", "calibTitle": "Калібрування екрана",
+      "calibHint": "Приклади КОРОТКУ сторону банківської картки (5.4 см) до смуги й підлаштуй повзунком.",
+      "calibSave": "Зберегти", "calibDone": "Збережено",
+      "noHaptic": "Вібрація недоступна на цьому пристрої",
+      "profTheme": "Темна тема", "profLang": "Мова", "profTagline": "Екранна лінійка · точні см/мм",
+      "install": "Встановити застосунок", "installTitle": "Встановлення", "installBtn": "Встановити", "installDesc": "Працює офлайн, відкривається як застосунок",
+      "installIosHint": "У Safari: «Поділитися» → «На початковий екран».", "installGenericHint": "У меню браузера обери «Встановити».",
+      "close": "Закрити", "refresh": "Скинути", "toastSaved": "Збережено", "toastRemoved": "Прибрано", "back": "Назад"
+    },
+    "en": {
+      "title": "Ruler", "tabRuler": "Ruler", "tabMe": "Settings",
+      "rulerHint": "Place an object on the screen and drag the marker",
+      "calibrate": "Calibrate", "calibTitle": "Screen calibration",
+      "calibHint": "Lay the SHORT edge of a bank card (5.4 cm) along the bar and adjust the slider.",
+      "calibSave": "Save", "calibDone": "Saved",
+      "noHaptic": "Vibration is not available on this device",
+      "profTheme": "Dark theme", "profLang": "Language", "profTagline": "On-screen ruler · accurate cm/mm",
+      "install": "Install app", "installTitle": "Install", "installBtn": "Install", "installDesc": "Works offline, opens like an app",
+      "installIosHint": "In Safari: Share → 'Add to Home Screen'.", "installGenericHint": "In your browser menu choose 'Install'.",
+      "close": "Close", "refresh": "Reset", "toastSaved": "Saved", "toastRemoved": "Removed", "back": "Back"
+    }
+  }
+}
