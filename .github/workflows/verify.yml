@@ -33,7 +33,9 @@ jobs:
           deno-version: v2.x
 
       - name: Unit tests (pure logic, no browser — fails fast before the gate)
-        run: deno test --allow-read skill/runtime flashlight
+        # -c runtime/deno.json supplies the esm.sh import map so the runtime's own validate_test
+        # (which pulls nanostores) runs alongside the dep-free pure/morse tests.
+        run: deno test -A -c skill/runtime/deno.json skill/runtime flashlight
 
       - name: Install Chrome
         id: chrome
