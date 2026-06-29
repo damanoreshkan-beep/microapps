@@ -74,9 +74,26 @@ jobs:
             git push origin "HEAD:${{ github.ref_name }}"
           fi
 
-      - name: Verify whole farm (check-all)
+      # The human-eye gate: on PR/dispatch, check-all also writes states/main.png for every app —
+      # populated (verify settles + polls until the data skeletons clear), unlike a bare shot that
+      # races the fetch. Uploaded as an artifact so a human (me via `gh run download` + viewing, and
+      # the user on-device) judges the actual UX — the aesthetic call the mechanical checks can't make.
+      - name: Verify whole farm (check-all) + populated screenshots on PR
         env:
           DISPLAY: ":99"
           DISPLAY_NUM: "99"
           CHROMIUM_PATH: ${{ steps.chrome.outputs.chrome-path }}
-        run: deno task -c skill/harness/deno.json check-all "$GITHUB_WORKSPACE"
+        run: |
+          SHOTS=""
+          case "${{ github.event_name }}" in pull_request|workflow_dispatch) SHOTS="--shots" ;; esac
+          deno task -c skill/harness/deno.json check-all "$GITHUB_WORKSPACE" $SHOTS
+
+      - name: Upload screenshots (populated) for human-eye review
+        if: always() && (github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch')
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: |
+            */states/main.png
+            */states/last.png
+          if-no-files-found: warn
