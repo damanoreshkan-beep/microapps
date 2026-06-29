@@ -1,0 +1,58 @@
+{
+  "id": "countries",
+  "theme": "dim",
+  "fav": { "key": "id" },
+  "filters": {
+    "refetch": true,
+    "defaults": { "region": "" },
+    "controls": [
+      {
+        "type": "segment", "key": "region", "label": "filterRegion", "icon": "lucide:globe", "chip": true,
+        "options": [["", "regAll"], ["Europe", "regEurope"], ["Asia", "regAsia"], ["Africa", "regAfrica"], ["Americas", "regAmericas"], ["Oceania", "regOceania"]]
+      }
+    ]
+  },
+  "profile": { "icon": "lucide:globe", "theme": true, "lang": true, "install": true, "source": { "label": "profSource", "url": "https://github.com/mledoze/countries", "icon": "lucide:database" } },
+  "tabs": [
+    {
+      "id": "feed", "type": "list", "icon": "lucide:globe", "label": "tabFeed", "search": true, "statusKey": "status", "searchKey": "search",
+      "card": { "layout": "feed", "image": "flag", "imageFit": "contain", "href": "map", "title": "name", "subtitle": "capital", "more": "more", "meta": "area", "badges": [{ "field": "region", "icon": "lucide:map-pin", "variant": "ghost" }] }
+    },
+    {
+      "id": "saved", "type": "list", "icon": "lucide:bookmark", "label": "tabSaved", "source": "fav", "searchKey": "search",
+      "empty": { "icon": "lucide:bookmark", "text": "emptySaved", "hint": "emptySavedHint" },
+      "card": { "layout": "feed", "image": "flag", "imageFit": "contain", "href": "map", "title": "name", "subtitle": "capital", "badges": [{ "field": "region", "icon": "lucide:map-pin", "variant": "ghost" }] }
+    },
+    { "id": "me", "type": "profile", "icon": "lucide:user", "label": "tabMe", "titleKey": "tabMe" }
+  ],
+  "i18n": {
+    "uk": {
+      "close": "Закрити", "refresh": "Оновити", "toastSaved": "Збережено", "toastRemoved": "Прибрано",
+      "statusLoading": "Оновлення…", "statusError": "Дані недоступні", "errorHint": "Перевір зʼєднання та онови",
+      "favAria": "Додати в обрані", "unfavAria": "Прибрати з обраних",
+      "profTheme": "Темна тема", "profLang": "Мова", "profTagline": "Країни світу · прапори й факти", "profSource": "Джерело — mledoze/countries",
+      "install": "Встановити застосунок", "installTitle": "Встановлення", "installBtn": "Встановити", "installDesc": "Працює офлайн, відкривається як застосунок",
+      "installIosHint": "У Safari: «Поділитися» → «На початковий екран».", "installGenericHint": "У меню браузера обери «Встановити».",
+      "title": "Країни світу", "tabFeed": "Країни", "tabSaved": "Збережені", "tabMe": "Я",
+      "search": "Пошук країни…", "status": "Країн: {total}", "more": "На карті",
+      "savedCount": "Збережено: {n}", "emptySaved": "Поки порожньо", "emptySavedHint": "Додавай країни через закладку",
+      "noResults": "Нічого не знайдено", "noResultsHint": "Спробуй іншу назву",
+      "ariaFilter": "Фільтр за регіоном", "filterTitle": "Регіон", "apply": "Готово", "filterRegion": "Регіон",
+      "regAll": "Усі", "regEurope": "Європа", "regAsia": "Азія", "regAfrica": "Африка", "regAmericas": "Америка", "regOceania": "Океанія"
+    },
+    "en": {
+      "close": "Close", "refresh": "Refresh", "toastSaved": "Saved", "toastRemoved": "Removed",
+      "statusLoading": "Updating…", "statusError": "Data unavailable", "errorHint": "Check connection and refresh",
+      "favAria": "Add to favorites", "unfavAria": "Remove from favorites",
+      "profTheme": "Dark theme", "profLang": "Language", "profTagline": "World countries · flags & facts", "profSource": "Source — mledoze/countries",
+      "install": "Install app", "installTitle": "Install", "installBtn": "Install", "installDesc": "Works offline, opens like an app",
+      "installIosHint": "In Safari: Share → 'Add to Home Screen'.", "installGenericHint": "In your browser menu choose 'Install'.",
+      "title": "Countries", "tabFeed": "Countries", "tabSaved": "Saved", "tabMe": "Me",
+      "search": "Search country…", "status": "Countries: {total}", "more": "Map",
+      "savedCount": "Saved: {n}", "emptySaved": "Nothing yet", "emptySavedHint": "Add countries via bookmark",
+      "noResults": "Nothing found", "noResultsHint": "Try another name",
+      "ariaFilter": "Filter by region", "filterTitle": "Region", "apply": "Done", "filterRegion": "Region",
+      "regAll": "All", "regEurope": "Europe", "regAsia": "Asia", "regAfrica": "Africa", "regAmericas": "Americas", "regOceania": "Oceania"
+    }
+  }
+}
