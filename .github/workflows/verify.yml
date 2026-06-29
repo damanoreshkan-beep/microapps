@@ -80,3 +80,33 @@ jobs:
           DISPLAY_NUM: "99"
           CHROMIUM_PATH: ${{ steps.chrome.outputs.chrome-path }}
         run: deno task -c skill/harness/deno.json check-all "$GITHUB_WORKSPACE"
+
+      # The human-eye gate: CI renders the populated screens (?mock for sensor apps), uploads them as
+      # an artifact. A human (me via `gh run download` + viewing, and the user on-device) judges the
+      # actual UX — the aesthetic call CI's mechanical design checks can't make. Runs even if check-all
+      # fails, so a broken screen is still visible.
+      - name: Screenshots for human-eye review
+        if: always() && (github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch')
+        env:
+          DISPLAY: ":99"
+          DISPLAY_NUM: "99"
+          CHROMIUM_PATH: ${{ steps.chrome.outputs.chrome-path }}
+        run: |
+          deno task -c skill/harness/deno.json setup
+          mkdir -p _shots
+          for d in */ ; do
+            [ -f "${d}spec.json" ] || continue
+            app="${d%/}"
+            echo "shot: $app"
+            deno task -c skill/harness/deno.json shot "$GITHUB_WORKSPACE/$app" "$GITHUB_WORKSPACE/_shots/$app.png" \
+              --query "mock=1" --width 384 --height 832 --settle 3500 || echo "  shot failed: $app"
+          done
+          ls -la _shots
+
+      - name: Upload screenshots
+        if: always() && (github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch')
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: _shots/*.png
+          if-no-files-found: warn
