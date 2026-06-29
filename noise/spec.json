@@ -1,0 +1,37 @@
+{
+  "id": "noise",
+  "theme": "dim",
+  "profile": { "icon": "lucide:mic", "theme": true, "lang": true, "install": true },
+  "tabs": [
+    { "id": "meter", "type": "tool", "view": "meter", "needs": ["mic", "haptic"], "icon": "lucide:audio-lines", "label": "tabMeter", "titleKey": "title" },
+    { "id": "me", "type": "profile", "icon": "lucide:settings", "label": "tabMe", "titleKey": "tabMe" }
+  ],
+  "i18n": {
+    "uk": {
+      "title": "Шумомір", "tabMeter": "Рівень", "tabMe": "Налаштування",
+      "enableMic": "Увімкнути мікрофон", "micHint": "Дозволь доступ до мікрофона для вимірювання рівня шуму",
+      "micDenied": "Доступ до мікрофона заборонено", "micDeniedHint": "Дозволь мікрофон у налаштуваннях браузера",
+      "noMic": "Мікрофон недоступний", "noMicHint": "Пристрій не підтримує запис у браузері",
+      "unit": "дБ", "approxNote": "приблизний рівень (відносний)", "peak": "пік", "resetPeak": "Скинути пік",
+      "zVeryQuiet": "дуже тихо", "zQuiet": "тихо · кімната", "zTalk": "розмова", "zLoud": "гучно", "zHarm": "шкідливо для слуху",
+      "calibrate": "Калібрування", "calibTitle": "Калібрування рівня", "calibHint": "Підлаштуй зсув під відоме джерело. Веб не дає абсолютних дБ — це приблизно.", "calibSave": "Зберегти", "calibDone": "Збережено", "calibReset": "Скинути",
+      "profTheme": "Темна тема", "profLang": "Мова", "profTagline": "Рівень шуму через мікрофон · приблизно",
+      "install": "Встановити застосунок", "installTitle": "Встановлення", "installBtn": "Встановити", "installDesc": "Працює офлайн, відкривається як застосунок",
+      "installIosHint": "У Safari: «Поділитися» → «На початковий екран».", "installGenericHint": "У меню браузера обери «Встановити».",
+      "close": "Закрити", "refresh": "Оновити", "back": "Назад", "toastSaved": "Збережено", "toastRemoved": "Прибрано"
+    },
+    "en": {
+      "title": "Sound level", "tabMeter": "Level", "tabMe": "Settings",
+      "enableMic": "Enable microphone", "micHint": "Allow microphone access to measure the noise level",
+      "micDenied": "Microphone access denied", "micDeniedHint": "Allow the microphone in your browser settings",
+      "noMic": "Microphone unavailable", "noMicHint": "This device has no browser audio capture",
+      "unit": "dB", "approxNote": "approximate (relative) level", "peak": "peak", "resetPeak": "Reset peak",
+      "zVeryQuiet": "very quiet", "zQuiet": "quiet · room", "zTalk": "conversation", "zLoud": "loud", "zHarm": "harmful to hearing",
+      "calibrate": "Calibrate", "calibTitle": "Level calibration", "calibHint": "Adjust the offset against a known source. The web has no absolute dB — this is approximate.", "calibSave": "Save", "calibDone": "Saved", "calibReset": "Reset",
+      "profTheme": "Dark theme", "profLang": "Language", "profTagline": "Noise level via microphone · approximate",
+      "install": "Install app", "installTitle": "Install", "installBtn": "Install", "installDesc": "Works offline, opens like an app",
+      "installIosHint": "In Safari: Share → 'Add to Home Screen'.", "installGenericHint": "In your browser menu choose 'Install'.",
+      "close": "Close", "refresh": "Refresh", "back": "Back", "toastSaved": "Saved", "toastRemoved": "Removed"
+    }
+  }
+}
