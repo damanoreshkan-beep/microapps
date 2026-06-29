@@ -5,9 +5,11 @@ export default [
       await h.click("#nav-change"); await h.wait(200);
       h.expect((await h.count("#nav-chooser")) === 1, "вибір цілі не відкрився");
       await h.type("#nav-input", "50.4501, 30.5234"); await h.wait(100);
-      await h.click("#nav-add"); await h.wait(250);
-      const saved = JSON.parse((await h.storage("navigator:targets")) || "[]");
+      await h.click("#nav-add");
+      let saved = [];
+      for (let i = 0; i < 24; i++) { saved = JSON.parse((await h.storage("navigator:targets")) || "[]"); if (saved.length) break; await h.wait(500); }   // wait for resolve + reverse-geocode
       h.expect(saved.length >= 1 && Math.abs(saved[0].lat - 50.4501) < 0.001, "ціль не збереглась");
+      h.expect(typeof saved[0].name === "string" && saved[0].name.length > 0, "ціль без назви");
       h.expect((await h.storage("navigator:active")) === saved[0].id, "ціль не активувалась");
       h.expect((await h.count("#nav-chooser")) === 0, "вибір не закрився після додавання");
     },

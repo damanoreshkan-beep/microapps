@@ -10,6 +10,7 @@ import { useStore } from "@nanostores/preact";
 import { persistentAtom } from "@nanostores/persistent";
 import { geo, compass, haptic, distanceM, bearingDeg } from "/_rt/sensors.js";
 import { declination } from "./wmm.js";
+import { reverseName } from "./geocode.js";
 import { T } from "/_rt/core.js";
 
 const Icon = (i, c = "") => html`<iconify-icon icon=${i} class=${c}></iconify-icon>`;
@@ -61,7 +62,8 @@ export function NavView({ t, loc, toast, screen, openScreen, closeScreen }) {
   const [needCompass, setNeedCompass] = useState(false);
   const [input, setInput] = useState("");
   const [resolving, setResolving] = useState(false);
-  const lastCell = useRef("");
+  const [hereName, setHereName] = useState("");
+  const lastCell = useRef(""), lastHere = useRef("");
   const active = list.find((x) => x.id === aId) || null;
 
   useEffect(() => {
@@ -85,16 +87,26 @@ export function NavView({ t, loc, toast, screen, openScreen, closeScreen }) {
     lastCell.current = c; declination(g.lat, g.lng).then(setDecl);
   }, [g, active]);
 
+  // reverse-geocode the current position (district-level cell, so it doesn't refetch every GPS tick)
+  useEffect(() => {
+    if (!g) return;
+    const c = `${g.lat.toFixed(2)},${g.lng.toFixed(2)}`;
+    if (c === lastHere.current) return;
+    lastHere.current = c; reverseName(g.lat, g.lng).then((n) => n && setHereName(n));
+  }, [g]);
+
   const enableCompass = async () => { if (await compass.request()) { compass.start(); setNeedCompass(false); haptic.ok(); } };
-  const addTarget = (lat, lng, name) => {
-    const tgt = { id: String(Date.now()), name: name || `${lat.toFixed(4)}, ${lng.toFixed(4)}`, lat, lng };
+  const addTarget = async (lat, lng, name) => {                       // name a point by its place (reverse geocode) when none given
+    const label = name || (await reverseName(lat, lng)) || `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+    const tgt = { id: String(Date.now()), name: label, lat, lng };
     targets.set([tgt, ...list].slice(0, 50)); activeId.set(tgt.id); haptic.ok(); closeScreen();
   };
-  const saveHere = () => { if (g) addTarget(g.lat, g.lng, T(t, "savedPoint")); };
+  const saveHere = async () => { if (!g || resolving) return; setResolving(true); await addTarget(g.lat, g.lng); setResolving(false); };
   const addFromInput = async () => {
     if (!input.trim() || resolving) return;
-    setResolving(true); const p = await resolveLink(input); setResolving(false);
-    if (p) { addTarget(p.lat, p.lng, p.name); setInput(""); } else toast(T(t, "badCoords"));
+    setResolving(true); const p = await resolveLink(input);
+    if (p) { await addTarget(p.lat, p.lng, p.name); setInput(""); } else toast(T(t, "badCoords"));
+    setResolving(false);
   };
   const del = (id) => { targets.set(list.filter((x) => x.id !== id)); if (aId === id) activeId.set(""); };
 
@@ -106,7 +118,8 @@ export function NavView({ t, loc, toast, screen, openScreen, closeScreen }) {
     return html`<div id="nav-chooser" class="flex flex-col gap-3 px-4 pt-3">
       <h2 class="font-bold text-lg flex items-center gap-2">${Icon("lucide:map-pin", "text-primary")}${T(t, "chooseTarget")}</h2>
       ${g ? html`<div class="text-xs text-base-content/70 flex items-center gap-1 -mt-1">${Icon("lucide:locate-fixed", "text-success")}${T(t, "youHere")}: <span class="tabular-nums">${g.lat.toFixed(4)}, ${g.lng.toFixed(4)}</span></div>` : null}
-      <button id="nav-here" class=${`btn rounded-2xl gap-2 ${g ? "btn-primary" : "btn-disabled"}`} onClick=${saveHere}>${Icon("lucide:crosshair")}${T(t, "saveHere")}</button>
+      <button id="nav-here" class=${`btn rounded-2xl gap-2 ${g && !resolving ? "btn-primary" : "btn-disabled"}`} onClick=${saveHere}>${resolving ? html`<span class="loading loading-spinner loading-sm"></span>` : Icon("lucide:crosshair")}${T(t, "saveHere")}</button>
+      ${g && hereName ? html`<div class="text-xs text-base-content/70 -mt-1 px-1 flex items-center gap-1">${Icon("lucide:map-pin", "text-primary")}${hereName}</div>` : null}
       <div class="flex gap-2">
         <input id="nav-input" type="text" placeholder=${T(t, "coordsPlaceholder")} class="input input-bordered rounded-2xl flex-1 min-w-0" value=${input} onInput=${(e) => setInput(e.target.value)} onKeyDown=${(e) => e.key === "Enter" && addFromInput()} />
         <button id="nav-add" class=${`btn btn-primary rounded-2xl ${resolving ? "btn-disabled" : ""}`} onClick=${addFromInput}>${resolving ? html`<span class="loading loading-spinner loading-sm"></span>` : Icon("lucide:plus")}</button>
@@ -158,8 +171,9 @@ export function NavView({ t, loc, toast, screen, openScreen, closeScreen }) {
           <div class="text-right min-w-0"><div class="text-xs text-base-content/60">${T(t, "toLabel")}</div><div class="font-medium truncate max-w-[45vw] flex items-center gap-1 justify-end">${Icon("lucide:flag", "text-xs text-primary")}${active.name}</div></div>
         </div>
         <div class="grid grid-cols-2 gap-2 pt-1 border-t border-base-300/60">
-          <div><div class="text-xs text-base-content/60 flex items-center gap-1">${Icon("lucide:locate-fixed", "text-success")}${T(t, "youHere")}</div>
-            <div class="text-sm tabular-nums truncate">${g.lat.toFixed(4)}, ${g.lng.toFixed(4)}</div>
+          <div class="min-w-0"><div class="text-xs text-base-content/60 flex items-center gap-1">${Icon("lucide:locate-fixed", "text-success")}${T(t, "youHere")}</div>
+            ${hereName ? html`<div class="text-sm font-medium truncate">${hereName}</div>` : null}
+            <div class="text-xs text-base-content/70 tabular-nums truncate">${g.lat.toFixed(4)}, ${g.lng.toFixed(4)}</div>
             <div class="text-xs text-base-content/70 flex items-center gap-1.5"><span class=${`inline-block w-2 h-2 rounded-full ${q.c}`}></span>±${Math.round(g.accuracy)} ${loc === "en" ? "m" : "м"} · ${q.k}</div></div>
           <div class="text-right"><div class="text-xs text-base-content/60">${T(t, "course")}</div>
             ${heading == null
