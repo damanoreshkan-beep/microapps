@@ -10,7 +10,9 @@
     "uk": {
       "title": "Шумомір", "tabMeter": "Рівень", "tabMe": "Налаштування",
       "enableMic": "Увімкнути мікрофон", "micHint": "Дозволь доступ до мікрофона для вимірювання рівня шуму",
-      "micDenied": "Доступ до мікрофона заборонено", "micDeniedHint": "Дозволь мікрофон у налаштуваннях браузера",
+      "micDenied": "Мікрофон заблоковано", "micDeniedHint": "Дозволь мікрофон у налаштуваннях браузера",
+      "secureNeeded": "Потрібне безпечне зʼєднання", "secureHint": "getUserMedia працює лише на https або localhost. Відкрий через localhost, не за IP. Зараз:",
+      "fixSite": "Іконка зліва від адреси → Дозволи / Мікрофон → «Дозволити»", "fixOs": "Android → Налаштування → Програми → Chrome → Дозволи → Мікрофон → увімкнути", "fixReload": "Онови сторінку й натисни «Повторити»", "retry": "Повторити",
       "noMic": "Мікрофон недоступний", "noMicHint": "Пристрій не підтримує запис у браузері",
       "unit": "дБ", "approxNote": "приблизний рівень (відносний)", "peak": "пік", "resetPeak": "Скинути пік",
       "zVeryQuiet": "дуже тихо", "zQuiet": "тихо · кімната", "zTalk": "розмова", "zLoud": "гучно", "zHarm": "шкідливо для слуху",
@@ -23,7 +25,9 @@
     "en": {
       "title": "Sound level", "tabMeter": "Level", "tabMe": "Settings",
       "enableMic": "Enable microphone", "micHint": "Allow microphone access to measure the noise level",
-      "micDenied": "Microphone access denied", "micDeniedHint": "Allow the microphone in your browser settings",
+      "micDenied": "Microphone blocked", "micDeniedHint": "Allow the microphone in your browser settings",
+      "secureNeeded": "Secure connection required", "secureHint": "getUserMedia only works on https or localhost. Open via localhost, not an IP. Now:",
+      "fixSite": "Icon left of the address bar → Permissions / Microphone → 'Allow'", "fixOs": "Android → Settings → Apps → Chrome → Permissions → Microphone → enable", "fixReload": "Reload the page and tap 'Retry'", "retry": "Retry",
       "noMic": "Microphone unavailable", "noMicHint": "This device has no browser audio capture",
       "unit": "dB", "approxNote": "approximate (relative) level", "peak": "peak", "resetPeak": "Reset peak",
       "zVeryQuiet": "very quiet", "zQuiet": "quiet · room", "zTalk": "conversation", "zLoud": "loud", "zHarm": "harmful to hearing",

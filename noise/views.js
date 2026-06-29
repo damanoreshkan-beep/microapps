@@ -24,8 +24,11 @@ export function NoiseView({ t, toast, screen, openScreen, closeScreen }) {
 
   useEffect(() => {
     if (typeof location !== "undefined" && new URLSearchParams(location.search).has("mock")) { mic.db.set(58); mic.peak.set(72); return; }
+    // pre-detect a previously-blocked mic so we can show RESET steps instead of a dead "enable" button
+    try { navigator.permissions?.query?.({ name: "microphone" }).then((p) => { mic.permission.set(p.state); p.onchange = () => mic.permission.set(p.state); }).catch(() => {}); } catch { /* */ }
     return () => mic.stop();
   }, []);
+  const secure = typeof window === "undefined" || window.isSecureContext;   // getUserMedia needs https or localhost
 
   const enable = async () => { if (!(await mic.start())) haptic.bump(); };
 
@@ -55,12 +58,16 @@ export function NoiseView({ t, toast, screen, openScreen, closeScreen }) {
     </div>
     ${!running
       ? html`<div class="flex-1 flex flex-col items-center justify-center text-center gap-4 px-6">
-          ${!mic.supported
-            ? html`${Icon("lucide:mic-off", "text-5xl text-base-content/70")}<div class="font-medium">${T(t, "noMic")}</div><div class="text-sm text-base-content/70">${T(t, "noMicHint")}</div>`
-            : perm === "denied"
-              ? html`${Icon("lucide:mic-off", "text-5xl text-error/80")}<div class="font-medium">${T(t, "micDenied")}</div><div class="text-sm text-base-content/70">${T(t, "micDeniedHint")}</div>`
-              : html`${Icon("lucide:mic", "text-5xl text-primary")}<div class="text-sm text-base-content/70">${T(t, "micHint")}</div>
-                  <button id="noise-enable" class="btn btn-primary rounded-2xl gap-2 mt-1" onClick=${enable}>${Icon("lucide:mic")}${T(t, "enableMic")}</button>`}
+          ${!secure
+            ? html`${Icon("lucide:shield-alert", "text-5xl text-warning/80")}<div class="font-medium">${T(t, "secureNeeded")}</div><div class="text-sm text-base-content/70 break-words">${T(t, "secureHint")} <span class="tabular-nums">${typeof location !== "undefined" ? location.host : ""}</span></div>`
+            : !mic.supported
+              ? html`${Icon("lucide:mic-off", "text-5xl text-base-content/70")}<div class="font-medium">${T(t, "noMic")}</div><div class="text-sm text-base-content/70">${T(t, "noMicHint")}</div>`
+              : perm === "denied"
+                ? html`${Icon("lucide:mic-off", "text-5xl text-error/80")}<div class="font-medium">${T(t, "micDenied")}</div>
+                    <div class="text-sm text-base-content/70 text-left max-w-xs space-y-1"><div>${Icon("lucide:circle-1", "text-primary")} ${T(t, "fixSite")}</div><div>${Icon("lucide:circle-2", "text-primary")} ${T(t, "fixOs")}</div><div>${Icon("lucide:circle-3", "text-primary")} ${T(t, "fixReload")}</div></div>
+                    <button id="noise-enable" class="btn btn-ghost btn-sm rounded-2xl gap-1 mt-1" onClick=${enable}>${Icon("lucide:rotate-cw")}${T(t, "retry")}</button>`
+                : html`${Icon("lucide:mic", "text-5xl text-primary")}<div class="text-sm text-base-content/70">${T(t, "micHint")}</div>
+                    <button id="noise-enable" class="btn btn-primary rounded-2xl gap-2 mt-1" onClick=${enable}>${Icon("lucide:mic")}${T(t, "enableMic")}</button>`}
         </div>`
       : html`<div class="flex-1 flex flex-col items-center justify-center gap-5">
           <div class="text-center">
