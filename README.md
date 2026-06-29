@@ -1,5 +1,30 @@
 # microapps — farm
 
+<!-- CATALOG:START -->
+
+**[🚀 Портал — усі застосунки](https://damanoreshkan-beep.github.io/microapps/)** · 16 мікроапок · працюють офлайн (PWA)
+
+| Застосунок | Опис |
+|---|---|
+| **[Галерея мистецтва](https://damanoreshkan-beep.github.io/microapps/art/)** | Шедеври Метрополітен-музею |
+| **[Камера](https://damanoreshkan-beep.github.io/microapps/camera/)** | Камера з фільтрами · тренд-пресети 2026 |
+| **[Країни світу](https://damanoreshkan-beep.github.io/microapps/countries/)** | Країни світу · прапори й факти |
+| **[Крипто](https://damanoreshkan-beep.github.io/microapps/crypto/)** | Курси криптовалют у USD |
+| **[Курси НБУ](https://damanoreshkan-beep.github.io/microapps/nbu-spec/)** | Офіційні курси валют НБУ |
+| **[Лінійка](https://damanoreshkan-beep.github.io/microapps/ruler/)** | Екранна лінійка · точні см/мм |
+| **[Ліхтарик](https://damanoreshkan-beep.github.io/microapps/flashlight/)** | Ліхтарик · торч камери або екран + SOS |
+| **[Навігатор](https://damanoreshkan-beep.github.io/microapps/navigator/)** | Стрілка завжди вкаже напрям до точки |
+| **[Погода](https://damanoreshkan-beep.github.io/microapps/weather/)** | Прогноз погоди · Open-Meteo |
+| **[Сигналізація](https://damanoreshkan-beep.github.io/microapps/alarm/)** | Тривога на рух телефону · акселерометр |
+| **[Шумомір](https://damanoreshkan-beep.github.io/microapps/noise/)** | Рівень шуму через мікрофон · приблизно |
+| **[Якість повітря](https://damanoreshkan-beep.github.io/microapps/air/)** | Європейський індекс якості повітря · Open-Meteo |
+| **[DOU · бронювання](https://damanoreshkan-beep.github.io/microapps/dou-spec/)** | Вакансії з бронюванням від мобілізації |
+| **[GitHub Trending](https://damanoreshkan-beep.github.io/microapps/gh/)** | Популярні репозиторії GitHub |
+| **[Hacker News](https://damanoreshkan-beep.github.io/microapps/hn/)** | Технологічні новини й обговорення |
+| **[QR-сканер](https://damanoreshkan-beep.github.io/microapps/qr/)** | Сканер QR і штрих-кодів · нативний BarcodeDetector |
+
+<!-- CATALOG:END -->
+
 Micro mobile PWAs built on **nanoai2ui** (the spec-driven runtime, served at `/_rt/` from
 `~/.claude/skills/microapp/runtime/`). Each app is `spec.json` (declarative UI) + `data.js`
 (fetch/normalize) + boilerplate. Zero build, zero `node_modules`.
