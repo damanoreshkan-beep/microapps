@@ -1,0 +1,48 @@
+name: verify
+
+# The gate. Runs the harness (e2e + design checks) for every app in the farm on a clean
+# Ubuntu runner — the stable home for headed Chromium that the local proot env never was.
+# Local cycle is browser-free now: build + `deno eval` spec-validate + push; CI is the gate.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout farm + skill submodule
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          # SKILL_TOKEN: PAT with read access to the private microapp-skill submodule.
+          token: ${{ secrets.SKILL_TOKEN }}
+
+      - name: Install Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Install Chrome
+        id: chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
+
+      - name: Install Xvfb + fonts
+        run: sudo apt-get update && sudo apt-get install -y xvfb fonts-liberation
+
+      - name: Verify whole farm (check-all)
+        env:
+          DISPLAY: ":99"
+          DISPLAY_NUM: "99"
+          CHROMIUM_PATH: ${{ steps.chrome.outputs.chrome-path }}
+        run: |
+          deno task -c skill/harness/deno.json setup
+          deno task -c skill/harness/deno.json check-all "$GITHUB_WORKSPACE"
