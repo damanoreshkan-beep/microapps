@@ -12,6 +12,15 @@ export default [
     },
   },
   { name: "калібрування персистить (reload-стійке)", run: async (h) => { h.expect((await h.storage("ruler:pxPerCm")) === "70", "не персистнуло"); } },
+  {
+    name: "роутинг: системний Back закриває калібрування (не виходить з апки)", run: async (h) => {
+      await h.click("#ruler-calib"); await h.wait(200);
+      h.expect((await h.count("#calib")) === 1, "калібрування не відкрилось");
+      await h.back(); await h.wait(250);                          // hardware/browser Back
+      h.expect((await h.count("#calib")) === 0, "Back не закрив калібрування");
+      h.expect((await h.count("#ruler-box")) === 1, "Back вийшов з апки замість повернення до лінійки");
+    },
+  },
   { name: "i18n EN/UA", run: async (h) => { await h.click('[data-tab="me"]'); await h.wait(150); await h.click('[data-loc="en"]'); await h.wait(250); h.expect(/Language|Ruler|Settings/.test(await h.bodyText()), "не EN"); await h.click('[data-loc="uk"]'); await h.wait(200); await h.click('[data-tab="ruler"]'); await h.wait(150); } },
   { name: "PWA модалка", run: async (h) => { await h.click('[data-tab="me"]'); await h.wait(150); await h.click("#p-install"); await h.wait(150); h.expect((await h.prop("#install", "open")) === true, "не відкрилось"); } },
 ];

@@ -1,6 +1,8 @@
 // RulerView — the irreducible custom visual for the `tool` family. Built on shared primitives:
 // preact hooks (import map), persisted calibration (nanostores/persistent), haptics (/_rt/sensors.js),
 // i18n T (/_rt/core.js). The shell (AppBar/Dock/Profile/theme/install/routing/gates) is the runtime's.
+// IMPORTANT: the calibration sub-screen routes through the runtime's history-backed `screen` prop
+// (NOT local state) so the system Back button closes it instead of exiting the app.
 import { html } from "htm/preact";
 import { useState, useRef, useEffect, useCallback } from "preact/hooks";
 import { useStore } from "@nanostores/preact";
@@ -13,20 +15,20 @@ const Icon = (i, c = "") => html`<iconify-icon icon=${i} class=${c}></iconify-ic
 const pxPerCm = persistentAtom("ruler:pxPerCm", "56");
 const CARD_CM = 5.4; // bank-card SHORT edge (53.98 mm) — fits a narrow phone width, unlike the long edge
 
-export function RulerView({ t, toast }) {
+export function RulerView({ t, toast, screen, openScreen, closeScreen }) {
   const ppc = Math.max(20, Number(useStore(pxPerCm)) || 56);
   const [markerY, setMarkerY] = useState(0);
   const [boxH, setBoxH] = useState(0);
-  const [calib, setCalib] = useState(false);
   const boxRef = useRef(null);
   const lastCm = useRef(0);
+  const onCalib = screen === "calib";
 
   useEffect(() => {
     const el = boxRef.current; if (!el || typeof ResizeObserver === "undefined") { if (el) setBoxH(el.clientHeight); return; }
     const measure = () => setBoxH(el.clientHeight);
     measure(); const ro = new ResizeObserver(measure); ro.observe(el);
     return () => ro.disconnect();
-  }, [calib]);
+  }, [onCalib]);
 
   const drag = useCallback((e) => {
     const r = boxRef.current.getBoundingClientRect();
@@ -40,9 +42,9 @@ export function RulerView({ t, toast }) {
   const cm = markerY / ppc;
   const mm = Math.round(cm * 10);
 
-  // ── calibration screen ───────────────────────────────────────────────
-  if (calib) {
-    return html`<div id="calib" class="flex flex-col gap-4 pt-2">
+  // ── calibration sub-screen (history-backed via `screen`) ─────────────
+  if (onCalib) {
+    return html`<div id="calib" class="flex flex-col gap-4 px-4 pt-3">
       <div class="card bg-base-100 border border-base-300 rounded-2xl"><div class="card-body p-4 gap-3">
         <h2 class="font-bold text-lg flex items-center gap-2">${Icon("lucide:scan-line", "text-primary")}${T(t, "calibTitle")}</h2>
         <p class="text-sm text-base-content/70">${T(t, "calibHint")}</p>
@@ -51,12 +53,12 @@ export function RulerView({ t, toast }) {
         </div>
         <input id="calib-range" type="range" min="38" max="80" step="0.2" value=${ppc} class="range range-primary" onInput=${(e) => pxPerCm.set(String(e.target.value))} />
         <div class="text-center tabular-nums text-sm text-base-content/70">${ppc.toFixed(1)} px / см</div>
-        <button id="calib-save" class="btn btn-primary rounded-2xl mt-1" onClick=${() => { setCalib(false); haptic.ok(); toast(T(t, "calibDone")); }}>${T(t, "calibSave")}</button>
+        <button id="calib-save" class="btn btn-primary rounded-2xl mt-1" onClick=${() => { closeScreen(); haptic.ok(); toast(T(t, "calibDone")); }}>${T(t, "calibSave")}</button>
       </div></div>
     </div>`;
   }
 
-  // ── ruler screen ─────────────────────────────────────────────────────
+  // ── ruler screen (scale flush to the LEFT screen edge) ───────────────
   const ticks = [];
   const maxMm = Math.ceil((boxH || 600) / ppc) * 10;
   for (let i = 0; i <= maxMm; i++) {
@@ -67,13 +69,13 @@ export function RulerView({ t, toast }) {
     if (isCm && i > 0) ticks.push(html`<div class="absolute text-xs tabular-nums text-base-content/80" key=${"n" + i} style=${`top:${y - 7}px;left:62px`}>${i / 10}</div>`);
   }
 
-  return html`<div class="flex flex-col gap-2" style="height:calc(100dvh - 8.5rem)">
-    <div class="flex items-center gap-3">
+  return html`<div class="flex flex-col" style="height:calc(100dvh - 9rem)">
+    <div class="flex items-center gap-3 px-4 pt-2">
       <div id="ruler-readout" class="flex-1 tabular-nums"><span class="text-3xl font-bold">${cm.toFixed(1)}</span><span class="text-lg font-semibold"> см</span><span class="text-base-content/70 text-sm"> · ${mm} мм</span></div>
-      <button id="ruler-calib" class="btn btn-sm btn-ghost bg-base-100 border border-base-300 rounded-full gap-1" onClick=${() => setCalib(true)}>${Icon("lucide:scan-line")}${T(t, "calibrate")}</button>
+      <button id="ruler-calib" class="btn btn-sm btn-ghost bg-base-100 border border-base-300 rounded-full gap-1" onClick=${() => openScreen("calib")}>${Icon("lucide:scan-line")}${T(t, "calibrate")}</button>
     </div>
-    <div class="text-xs text-base-content/70 -mt-1">${T(t, "rulerHint")}</div>
-    <div id="ruler-box" ref=${boxRef} class="relative flex-1 rounded-2xl bg-base-100 border border-base-300 overflow-hidden select-none" style="touch-action:none"
+    <div class="text-xs text-base-content/70 px-4 mt-0.5">${T(t, "rulerHint")}</div>
+    <div id="ruler-box" ref=${boxRef} class="relative flex-1 bg-base-100 border-y border-base-300 overflow-hidden select-none mt-2" style="touch-action:none"
          onPointerDown=${onDown} onPointerMove=${(e) => e.buttons && drag(e)}>
       ${ticks}
       <div class="absolute left-0 right-0 flex items-center pointer-events-none" style=${`top:${markerY}px;transform:translateY(-50%)`}>
