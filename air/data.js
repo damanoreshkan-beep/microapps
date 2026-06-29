@@ -11,14 +11,15 @@ const CITIES = {
   kharkiv: { lat: 49.9935, lon: 36.2304, uk: "Харків",  en: "Kharkiv" },
   dnipro:  { lat: 48.4647, lon: 35.0462, uk: "Дніпро",  en: "Dnipro" },
 };
-// European AQI band by upper bound → [icon, uk label, en label]. 0-20 good … >100 extremely poor.
+// European AQI band by upper bound → [icon, colour, uk label, en label]. Face glyph + green→red colour
+// read as air quality at a glance (not weather). 0-20 good … >100 extremely poor.
 const BANDS = [
-  [20, "lucide:leaf", "Добре", "Good"],
-  [40, "lucide:wind", "Прийнятно", "Fair"],
-  [60, "lucide:cloud", "Помірно", "Moderate"],
-  [80, "lucide:cloud-fog", "Погано", "Poor"],
-  [100, "lucide:alert-triangle", "Дуже погано", "Very poor"],
-  [Infinity, "lucide:skull", "Небезпечно", "Extremely poor"],
+  [20, "lucide:smile", "#22c55e", "Добре", "Good"],
+  [40, "lucide:smile", "#a3e635", "Прийнятно", "Fair"],
+  [60, "lucide:meh", "#facc15", "Помірно", "Moderate"],
+  [80, "lucide:frown", "#fb923c", "Погано", "Poor"],
+  [100, "lucide:frown", "#f87171", "Дуже погано", "Very poor"],
+  [Infinity, "lucide:skull", "#d946ef", "Небезпечно", "Extremely poor"],
 ];
 const band = (aqi) => BANDS.find(([max]) => (aqi ?? 0) <= max) || BANDS[BANDS.length - 1];
 
@@ -45,7 +46,7 @@ export async function load(filters = {}) {
   if (start < 0) start = 0;
   const hourly = (H.time || []).slice(start, start + 24).map((tm, i) => {
     const a = round(H.european_aqi[start + i]);
-    return { time: tm.slice(11, 16), icon: band(a)[1], aqi: a };
+    return { time: tm.slice(11, 16), aqi: a, tone: band(a)[2] };
   });
 
   // daily hi/lo AQI aggregated from the hourly series → data.items
@@ -63,14 +64,15 @@ export async function load(filters = {}) {
       : i === 1 ? (en ? "Tomorrow" : "Завтра")
       : date.toLocaleDateString(wd, { weekday: "long" });
     const hi = round(Math.max(...arr)), lo = round(Math.min(...arr));
-    return { day, icon: band(hi)[1], hi, lo };
+    return { day, hi, lo, tone: band(hi)[2] };
   });
 
   const meta = {
     place: en ? city.en : city.uk,
     aqi,
-    band: en ? b[3] : b[2],
+    band: en ? b[4] : b[3],
     icon: b[1],
+    tone: b[2],
     pm25: round(cur.pm2_5),
     pm10: round(cur.pm10),
     o3: round(cur.ozone),
