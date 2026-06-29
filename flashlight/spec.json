@@ -1,0 +1,31 @@
+{
+  "id": "flashlight",
+  "theme": "dim",
+  "profile": { "icon": "lucide:flashlight", "theme": true, "lang": true, "install": true },
+  "tabs": [
+    { "id": "light", "type": "tool", "view": "light", "needs": ["camera", "wakeLock"], "icon": "lucide:flashlight", "label": "tabLight", "titleKey": "title" },
+    { "id": "me", "type": "profile", "icon": "lucide:settings", "label": "tabMe", "titleKey": "tabMe" }
+  ],
+  "i18n": {
+    "uk": {
+      "title": "Ліхтарик", "tabLight": "Ліхтар", "tabMe": "Налаштування",
+      "turnOn": "Увімкнути", "turnOff": "Вимкнути", "on": "Увімкнено", "off": "Вимкнено", "sos": "SOS",
+      "modeTorch": "Ліхтарик камери", "modeScreen": "Екранний ліхтар (камера/торч недоступні)",
+      "tapOff": "Торкнись будь-де, щоб вимкнути", "sosNote": "Сигнал лиха блимає ··· — — — ···",
+      "profTheme": "Темна тема", "profLang": "Мова", "profTagline": "Ліхтарик · торч камери або екран + SOS",
+      "install": "Встановити застосунок", "installTitle": "Встановлення", "installBtn": "Встановити", "installDesc": "Працює офлайн, відкривається як застосунок",
+      "installIosHint": "У Safari: «Поділитися» → «На початковий екран».", "installGenericHint": "У меню браузера обери «Встановити».",
+      "close": "Закрити", "refresh": "Оновити", "back": "Назад", "toastSaved": "Збережено", "toastRemoved": "Прибрано"
+    },
+    "en": {
+      "title": "Flashlight", "tabLight": "Light", "tabMe": "Settings",
+      "turnOn": "Turn on", "turnOff": "Turn off", "on": "On", "off": "Off", "sos": "SOS",
+      "modeTorch": "Camera torch", "modeScreen": "Screen light (camera/torch unavailable)",
+      "tapOff": "Tap anywhere to turn off", "sosNote": "Distress signal blinks ··· — — — ···",
+      "profTheme": "Dark theme", "profLang": "Language", "profTagline": "Flashlight · camera torch or screen + SOS",
+      "install": "Install app", "installTitle": "Install", "installBtn": "Install", "installDesc": "Works offline, opens like an app",
+      "installIosHint": "In Safari: Share → 'Add to Home Screen'.", "installGenericHint": "In your browser menu choose 'Install'.",
+      "close": "Close", "refresh": "Refresh", "back": "Back", "toastSaved": "Saved", "toastRemoved": "Removed"
+    }
+  }
+}
