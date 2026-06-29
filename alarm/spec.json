@@ -1,0 +1,45 @@
+{
+  "id": "alarm",
+  "theme": "dim",
+  "profile": { "icon": "lucide:shield-alert", "theme": true, "lang": true, "install": true },
+  "tabs": [
+    { "id": "guard", "type": "tool", "view": "guard", "needs": ["motion", "haptic", "wakeLock"], "icon": "lucide:shield", "label": "tabGuard", "titleKey": "title" },
+    { "id": "me", "type": "profile", "icon": "lucide:settings", "label": "tabMe", "titleKey": "tabMe" }
+  ],
+  "i18n": {
+    "uk": {
+      "title": "Сигналізація", "tabGuard": "Охорона", "tabMe": "Налаштування",
+      "arm": "Поставити на охорону", "disarm": "Вимкнути охорону", "cancel": "Скасувати",
+      "idleTitle": "Вимкнено", "idleHint": "Постав на охорону, поклади телефон — будь-який рух увімкне тривогу",
+      "armingTitle": "Активація", "armingHint": "Поклади телефон і відійди",
+      "armedTitle": "Під охороною", "armedHint": "Не чіпай телефон",
+      "triggeredTitle": "ТРИВОГА", "triggeredHint": "Виявлено рух",
+      "sensitivity": "Чутливість", "sensTitle": "Чутливість", "sensHint": "Менший поріг = чутливіше. Підбери, щоб не було хибних спрацювань.", "sensLow": "груба", "sensHigh": "чутлива", "sensSave": "Зберегти", "sensDone": "Збережено",
+      "secureNeeded": "Потрібне безпечне зʼєднання", "secureHint": "Датчик руху працює лише на https або localhost. Відкрий через localhost, не за IP.",
+      "motionDenied": "Доступ до датчика руху заборонено", "motionDeniedHint": "Дозволь рух у налаштуваннях браузера й онови",
+      "noMotion": "Датчик руху недоступний", "noMotionHint": "Пристрій не підтримує акселерометр у браузері",
+      "bgNote": "Працює з відкритою апкою та увімкненим екраном",
+      "profTheme": "Темна тема", "profLang": "Мова", "profTagline": "Тривога на рух телефону · акселерометр",
+      "install": "Встановити застосунок", "installTitle": "Встановлення", "installBtn": "Встановити", "installDesc": "Працює офлайн, відкривається як застосунок",
+      "installIosHint": "У Safari: «Поділитися» → «На початковий екран».", "installGenericHint": "У меню браузера обери «Встановити».",
+      "close": "Закрити", "refresh": "Оновити", "back": "Назад", "toastSaved": "Збережено", "toastRemoved": "Прибрано"
+    },
+    "en": {
+      "title": "Motion alarm", "tabGuard": "Guard", "tabMe": "Settings",
+      "arm": "Arm the alarm", "disarm": "Disarm", "cancel": "Cancel",
+      "idleTitle": "Off", "idleHint": "Arm it, put the phone down — any movement triggers the alarm",
+      "armingTitle": "Arming", "armingHint": "Put the phone down and step away",
+      "armedTitle": "Armed", "armedHint": "Don't touch the phone",
+      "triggeredTitle": "ALARM", "triggeredHint": "Movement detected",
+      "sensitivity": "Sensitivity", "sensTitle": "Sensitivity", "sensHint": "Lower threshold = more sensitive. Tune to avoid false triggers.", "sensLow": "coarse", "sensHigh": "sensitive", "sensSave": "Save", "sensDone": "Saved",
+      "secureNeeded": "Secure connection required", "secureHint": "The motion sensor only works on https or localhost. Open via localhost, not an IP.",
+      "motionDenied": "Motion sensor access denied", "motionDeniedHint": "Allow motion in your browser settings and reload",
+      "noMotion": "Motion sensor unavailable", "noMotionHint": "This device has no browser accelerometer",
+      "bgNote": "Works with the app open and the screen on",
+      "profTheme": "Dark theme", "profLang": "Language", "profTagline": "Triggers on phone movement · accelerometer",
+      "install": "Install app", "installTitle": "Install", "installBtn": "Install", "installDesc": "Works offline, opens like an app",
+      "installIosHint": "In Safari: Share → 'Add to Home Screen'.", "installGenericHint": "In your browser menu choose 'Install'.",
+      "close": "Close", "refresh": "Refresh", "back": "Back", "toastSaved": "Saved", "toastRemoved": "Removed"
+    }
+  }
+}
