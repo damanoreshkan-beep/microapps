@@ -1,0 +1,39 @@
+{
+  "id": "navigator",
+  "theme": "dim",
+  "profile": { "icon": "lucide:navigation", "theme": true, "lang": true, "install": true },
+  "tabs": [
+    { "id": "nav", "type": "tool", "view": "nav", "needs": ["geo", "compass", "haptic"], "icon": "lucide:navigation", "label": "tabNav", "titleKey": "title" },
+    { "id": "me", "type": "profile", "icon": "lucide:settings", "label": "tabMe", "titleKey": "tabMe" }
+  ],
+  "i18n": {
+    "uk": {
+      "title": "Навігатор", "tabNav": "Напрям", "tabMe": "Налаштування",
+      "change": "Ціль", "chooseTarget": "Обрати ціль", "saveHere": "Зберегти поточне місце", "savedPoint": "Моя точка",
+      "coordsPlaceholder": "50.45, 30.52 або Maps-посилання", "badCoords": "Не розпізнав координати", "noTargets": "Поки немає збережених точок", "delete": "Видалити",
+      "noGeo": "Геолокація недоступна", "noGeoHint": "Пристрій не підтримує GPS у браузері",
+      "pickFirst": "Спершу обери ціль", "pickFirstHint": "Збережи поточне місце або встав координати",
+      "geoDenied": "Доступ до геолокації заборонено", "geoDeniedHint": "Дозволь геолокацію в налаштуваннях браузера",
+      "locating": "Шукаю супутники…", "locatingHint": "Вийди на відкрите місце для кращого сигналу",
+      "arrived": "Ви на місці!", "enableCompass": "Увімкнути компас", "noCompass": "Калібрувати", "magDecl": "схилення",
+      "profTheme": "Темна тема", "profLang": "Мова", "profTagline": "Стрілка завжди вкаже напрям до точки",
+      "install": "Встановити застосунок", "installTitle": "Встановлення", "installBtn": "Встановити", "installDesc": "Працює офлайн, відкривається як застосунок",
+      "installIosHint": "У Safari: «Поділитися» → «На початковий екран».", "installGenericHint": "У меню браузера обери «Встановити».",
+      "close": "Закрити", "refresh": "Оновити", "toastSaved": "Збережено", "toastRemoved": "Прибрано", "back": "Назад"
+    },
+    "en": {
+      "title": "Navigator", "tabNav": "Heading", "tabMe": "Settings",
+      "change": "Target", "chooseTarget": "Choose target", "saveHere": "Save current spot", "savedPoint": "My spot",
+      "coordsPlaceholder": "50.45, 30.52 or a Maps link", "badCoords": "Couldn't read coordinates", "noTargets": "No saved points yet", "delete": "Delete",
+      "noGeo": "Geolocation unavailable", "noGeoHint": "This device has no browser GPS",
+      "pickFirst": "Pick a target first", "pickFirstHint": "Save your current spot or paste coordinates",
+      "geoDenied": "Location access denied", "geoDeniedHint": "Allow location in your browser settings",
+      "locating": "Acquiring satellites…", "locatingHint": "Go to an open area for a better signal",
+      "arrived": "You've arrived!", "enableCompass": "Enable compass", "noCompass": "Calibrate", "magDecl": "declination",
+      "profTheme": "Dark theme", "profLang": "Language", "profTagline": "An arrow that always points to your target",
+      "install": "Install app", "installTitle": "Install", "installBtn": "Install", "installDesc": "Works offline, opens like an app",
+      "installIosHint": "In Safari: Share → 'Add to Home Screen'.", "installGenericHint": "In your browser menu choose 'Install'.",
+      "close": "Close", "refresh": "Refresh", "toastSaved": "Saved", "toastRemoved": "Removed", "back": "Back"
+    }
+  }
+}
