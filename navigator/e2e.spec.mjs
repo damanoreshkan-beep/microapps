@@ -12,7 +12,19 @@ export default [
       h.expect((await h.count("#nav-chooser")) === 0, "вибір не закрився після додавання");
     },
   },
-  { name: "погані координати → тост помилки", run: async (h) => { await h.click("#nav-change"); await h.wait(150); await h.type("#nav-input", "отакої"); await h.click("#nav-add"); await h.wait(150); h.expect(/розпізнав|read coord/i.test(await h.text("[data-toast]")), "немає тосту помилки"); await h.back(); await h.wait(200); } },
+  {
+    name: "короткий maps-лінк розрезолвлюється (proxy+геокодинг)", run: async (h) => {
+      const before = JSON.parse((await h.storage("navigator:targets")) || "[]").length;
+      await h.click("#nav-change"); await h.wait(200);
+      await h.type("#nav-input", "https://maps.app.goo.gl/VXs8aioLz7zF12VL8"); await h.click("#nav-add");
+      let after = before;
+      for (let i = 0; i < 24; i++) { after = JSON.parse((await h.storage("navigator:targets")) || "[]").length; if (after > before) break; await h.wait(500); }
+      const t0 = JSON.parse((await h.storage("navigator:targets")) || "[]")[0];
+      h.expect(after > before, "лінк не додав ціль");
+      h.expect(t0 && Math.abs(t0.lat - 50.85) < 0.5 && Math.abs(t0.lng - 31.04) < 0.6, "розрезолвлені координати не схожі на правильні");
+    },
+  },
+  { name: "погані координати → тост помилки", run: async (h) => { await h.click("#nav-change"); await h.wait(150); await h.type("#nav-input", "отакої"); await h.click("#nav-add"); await h.wait(200); h.expect(/розпізнав|read coord/i.test(await h.text("[data-toast]")), "немає тосту помилки"); await h.back(); await h.wait(200); } },
   {
     name: "роутинг: системний Back закриває вибір цілі", run: async (h) => {
       await h.click("#nav-change"); await h.wait(200);
