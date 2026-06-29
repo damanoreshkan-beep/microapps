@@ -1,0 +1,6 @@
+export default [
+  { name: "екран камери (gate + стрічка фільтрів)", run: async (h) => { await h.wait(400); h.expect((await h.count("#cam-enable")) === 1 || /Камера недоступна|unavailable/.test(await h.bodyText()), "немає gate камери"); h.expect((await h.count("#cam-strip")) === 1, "немає стрічки фільтрів"); h.expect((await h.count("[data-preset]")) >= 8, "замало пресетів"); } },
+  { name: "вибір пресету зберігається", run: async (h) => { await h.click('[data-preset="4"]'); await h.wait(150); h.expect((await h.storage("camera:preset")) === "4", "пресет не зберігся"); await h.click('[data-preset="0"]'); await h.wait(120); h.expect((await h.storage("camera:preset")) === "0", "не перемкнувся назад"); } },
+  { name: "i18n EN/UA", run: async (h) => { await h.click('[data-tab="me"]'); await h.wait(150); await h.click('[data-loc="en"]'); await h.wait(250); h.expect(/Language|Camera|Filters|Vintage/.test(await h.bodyText()), "не EN"); await h.click('[data-loc="uk"]'); await h.wait(200); await h.click('[data-tab="cam"]'); await h.wait(150); } },
+  { name: "PWA модалка", run: async (h) => { await h.click('[data-tab="me"]'); await h.wait(150); await h.click("#p-install"); await h.wait(150); h.expect((await h.prop("#install", "open")) === true, "не відкрилось"); } },
+];

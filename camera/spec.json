@@ -1,0 +1,39 @@
+{
+  "id": "camera",
+  "theme": "dim",
+  "profile": { "icon": "lucide:camera", "theme": true, "lang": true, "install": true },
+  "tabs": [
+    { "id": "cam", "type": "tool", "view": "cam", "needs": ["camera"], "icon": "lucide:aperture", "label": "tabCam", "titleKey": "title" },
+    { "id": "me", "type": "profile", "icon": "lucide:settings", "label": "tabMe", "titleKey": "tabMe" }
+  ],
+  "i18n": {
+    "uk": {
+      "title": "Камера", "tabCam": "Камера", "tabMe": "Налаштування",
+      "enableCam": "Увімкнути камеру", "camHint": "Дозволь доступ до камери для зйомки з фільтрами",
+      "camDenied": "Доступ до камери заборонено", "camDeniedHint": "Іконка зліва від адреси → Камера → «Дозволити», онови",
+      "noCam": "Камера недоступна", "noCamHint": "Пристрій не підтримує камеру в браузері",
+      "secureNeeded": "Потрібне безпечне зʼєднання", "secureHint": "Камера працює лише на https або localhost. Відкрий через localhost, не за IP.",
+      "capture": "Зняти", "flip": "Перемкнути камеру", "save": "Зберегти", "retake": "Ще раз", "saved": "Знято",
+      "filters": "Фільтри",
+      "pOriginal": "Оригінал", "pPortra": "Портра", "pCinema": "Кіно", "pMoody": "Муд", "pVintage": "Вінтаж", "pPastel": "Пастель", "pNoir": "Нуар Ч/Б", "pCool": "Холод",
+      "profTheme": "Темна тема", "profLang": "Мова", "profTagline": "Камера з фільтрами · тренд-пресети 2026",
+      "install": "Встановити застосунок", "installTitle": "Встановлення", "installBtn": "Встановити", "installDesc": "Працює офлайн, відкривається як застосунок",
+      "installIosHint": "У Safari: «Поділитися» → «На початковий екран».", "installGenericHint": "У меню браузера обери «Встановити».",
+      "close": "Закрити", "refresh": "Оновити", "back": "Назад", "toastSaved": "Збережено", "toastRemoved": "Прибрано"
+    },
+    "en": {
+      "title": "Camera", "tabCam": "Camera", "tabMe": "Settings",
+      "enableCam": "Enable camera", "camHint": "Allow camera access to shoot with filters",
+      "camDenied": "Camera access denied", "camDeniedHint": "Icon left of the address bar → Camera → 'Allow', reload",
+      "noCam": "Camera unavailable", "noCamHint": "This device has no browser camera",
+      "secureNeeded": "Secure connection required", "secureHint": "The camera only works on https or localhost. Open via localhost, not an IP.",
+      "capture": "Capture", "flip": "Switch camera", "save": "Save", "retake": "Retake", "saved": "Captured",
+      "filters": "Filters",
+      "pOriginal": "Original", "pPortra": "Portra", "pCinema": "Cinema", "pMoody": "Moody", "pVintage": "Vintage", "pPastel": "Pastel", "pNoir": "Noir B&W", "pCool": "Cool",
+      "profTheme": "Dark theme", "profLang": "Language", "profTagline": "Camera with filters · 2026 trend presets",
+      "install": "Install app", "installTitle": "Install", "installBtn": "Install", "installDesc": "Works offline, opens like an app",
+      "installIosHint": "In Safari: Share → 'Add to Home Screen'.", "installGenericHint": "In your browser menu choose 'Install'.",
+      "close": "Close", "refresh": "Refresh", "back": "Back", "toastSaved": "Saved", "toastRemoved": "Removed"
+    }
+  }
+}
