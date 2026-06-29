@@ -165,21 +165,21 @@ export function NavView({ t, loc, toast, screen, openScreen, closeScreen }) {
             <div class="badge badge-lg bg-base-100 border-base-300 gap-1 font-medium">${Icon("lucide:compass", "text-primary")}${T(t, "toTarget")}: ${cardOf(brTrue, loc)} · ${Math.round(brTrue)}°</div>
             <div class=${`text-sm text-center px-6 flex items-center gap-1.5 ${aligned ? "text-success font-semibold" : "text-base-content/70"}`}>${aligned ? html`${Icon("lucide:check")}${T(t, "goStraight")}` : html`${Icon(sgn > 0 ? "lucide:corner-up-right" : "lucide:corner-up-left")}${T(t, sgn > 0 ? "turnRight" : "turnLeft")}`}</div>`}
       </div>
-      <div class="card bg-base-100 border border-base-300 rounded-2xl"><div class="card-body p-4 gap-3">
-        <div class="flex items-center justify-between gap-2">
-          <div><div class="text-4xl font-bold tabular-nums leading-none">${fmtDist(dist, loc)}</div></div>
-          <div class="text-right min-w-0"><div class="text-xs text-base-content/60">${T(t, "toLabel")}</div><div class="font-medium truncate max-w-[45vw] flex items-center gap-1 justify-end">${Icon("lucide:flag", "text-xs text-primary")}${active.name}</div></div>
-        </div>
-        <div class="grid grid-cols-2 gap-2 pt-1 border-t border-base-300/60">
-          <div class="min-w-0"><div class="text-xs text-base-content/60 flex items-center gap-1">${Icon("lucide:locate-fixed", "text-success")}${T(t, "youHere")}</div>
-            ${hereName ? html`<div class="text-sm font-medium truncate">${hereName}</div>` : null}
-            <div class="text-xs text-base-content/70 tabular-nums truncate">${g.lat.toFixed(4)}, ${g.lng.toFixed(4)}</div>
-            <div class="text-xs text-base-content/70 flex items-center gap-1.5"><span class=${`inline-block w-2 h-2 rounded-full ${q.c}`}></span>±${Math.round(g.accuracy)} ${loc === "en" ? "m" : "м"} · ${q.k}</div></div>
-          <div class="text-right"><div class="text-xs text-base-content/60">${T(t, "course")}</div>
+      <div class="card bg-base-100 border border-base-300 rounded-2xl"><div class="card-body p-4 gap-2.5">
+        <div><div class="text-xs text-base-content/60 flex items-center gap-1">${Icon("lucide:flag", "text-primary")}${T(t, "toLabel")}</div>
+          <div class="text-lg font-semibold leading-tight break-words">${active.name}</div></div>
+        <div class="flex items-end justify-between gap-3 pt-2 border-t border-base-300/60">
+          <div class="text-4xl font-bold tabular-nums leading-none">${fmtDist(dist, loc)}</div>
+          <div class="text-right shrink-0">
             ${heading == null
-              ? html`<button id="nav-compass" class="btn btn-xs btn-primary rounded-full gap-1 mt-0.5" onClick=${enableCompass}>${Icon("lucide:compass")}${T(t, needCompass ? "enableCompass" : "noCompass")}</button>`
-              : html`<div class="tabular-nums"><span class="text-xl font-bold">${Math.round(heading)}°</span> <span class="text-base-content/70">${cardOf(heading, loc)}</span></div>`}
+              ? html`<button id="nav-compass" class="btn btn-xs btn-primary rounded-full gap-1" onClick=${enableCompass}>${Icon("lucide:compass")}${T(t, needCompass ? "enableCompass" : "noCompass")}</button>`
+              : html`<div class="text-xs text-base-content/60">${T(t, "course")}</div><div class="tabular-nums leading-none"><span class="text-2xl font-bold">${Math.round(heading)}°</span> <span class="text-base-content/70">${cardOf(heading, loc)}</span></div>`}
           </div>
+        </div>
+        <div class="pt-2 border-t border-base-300/60">
+          <div class="text-xs text-base-content/60 flex items-center gap-1">${Icon("lucide:locate-fixed", "text-success")}${T(t, "youHere")}</div>
+          ${hereName ? html`<div class="text-sm font-medium break-words">${hereName}</div>` : null}
+          <div class="text-xs text-base-content/70 flex items-center gap-x-2 gap-y-0.5 flex-wrap mt-0.5"><span class="flex items-center gap-1.5"><span class=${`inline-block w-2 h-2 rounded-full ${q.c}`}></span>±${Math.round(g.accuracy)} ${loc === "en" ? "m" : "м"} · ${q.k}</span><span class="tabular-nums opacity-70">${g.lat.toFixed(4)}, ${g.lng.toFixed(4)}</span></div>
         </div>
       </div></div>
     </div>`;
