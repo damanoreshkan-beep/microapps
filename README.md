@@ -18,6 +18,7 @@ Micro mobile PWAs built on **nanoai2ui** (the spec-driven runtime, served at `/_
 | Країни світу | `countries/` | media gallery | mledoze + flagcdn | detail page (Intl UA names) |
 | Лінійка | `ruler/` | tool (sensor) | device hardware | `tool` tab + `sensors.js` (haptic) |
 | Навігатор | `navigator/` | tool (sensor) | GPS + compass + WMM | `sensors.js` geo/compass; CSS-3D arrow |
+| Шумомір | `noise/` | tool (sensor) | microphone | `sensors.js` mic (approx dB) |
 | (hand-coded ref) | `nbu-rates/` | — | bank.gov.ua | n/a |
 
 ## Dev
