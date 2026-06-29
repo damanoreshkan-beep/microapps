@@ -37,19 +37,19 @@ async function resolveLink(input) {
   if (direct) return direct;
   if (!/^https?:\/\//i.test(input)) return null;
   try {
-    const res = await fetch("/feed?url=" + encodeURIComponent(input));
-    const finalUrl = res.headers.get("x-resolved-url") || "";
-    const body = await res.text();
-    const fromUrl = coordFromAny(finalUrl);               // reliable: @lat,lng / !3d!4d / q= / ll=
+    // 1) follow the redirect server-side → final URL in the body (?resolve=1, bulletproof)
+    const finalUrl = await fetch("/feed?resolve=1&url=" + encodeURIComponent(input)).then((r) => r.text()).catch(() => "");
+    const fromUrl = coordFromAny(finalUrl);               // @lat,lng / !3d!4d / q= / ll=
     if (fromUrl) return fromUrl;
-    const raw = (finalUrl.match(/\/place\/([^/@]+)/) || [])[1];   // place-by-id link → geocode the name
+    // 2) place-by-id link (/place/<name>) → geocode the name (Open-Meteo, no key)
+    const raw = (finalUrl.match(/\/place\/([^/@]+)/) || [])[1];
     if (raw) {
       const place = decodeURIComponent(raw).replace(/\+/g, " ").split(",")[0].trim();
-      const g = await fetch("/feed?url=" + encodeURIComponent("https://geocoding-api.open-meteo.com/v1/search?count=1&language=uk&name=" + encodeURIComponent(place)));
-      const j = JSON.parse(await g.text());
+      const j = JSON.parse(await fetch("/feed?url=" + encodeURIComponent("https://geocoding-api.open-meteo.com/v1/search?count=1&language=uk&name=" + encodeURIComponent(place))).then((r) => r.text()));
       if (j.results && j.results[0]) return { lat: j.results[0].latitude, lng: j.results[0].longitude, name: place };
     }
-    return coordFromAny(body);                             // last resort: scrape body (noisy)
+    // 3) last resort: scrape coords from the page body
+    return coordFromAny(await fetch("/feed?url=" + encodeURIComponent(input)).then((r) => r.text()).catch(() => ""));
   } catch { /* network/parse */ }
   return null;
 }
