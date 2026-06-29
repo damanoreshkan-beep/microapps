@@ -27,11 +27,11 @@ function StopwatchView({ t }) {
   const reset = () => { cancelAnimationFrame(r.current.raf); r.current.base = 0; setEl(0); setLaps([]); setRunning(false); wakeLock.off(); haptic.bump(); };
   const lap = () => { setLaps((l) => [el, ...l]); haptic.tick(); };
 
-  return html`<div class="flex flex-col items-center" style="min-height:calc(100dvh - 8.5rem)">
+  return html`<div class="flex flex-col items-center @container" style="min-height:calc(100dvh - 8.5rem)">
     <div class="flex-1 flex items-center justify-center w-full">
-      <div id="sw-time" class="text-6xl max-[280px]:text-4xl font-bold tabular-nums tracking-tight">${fmtSW(el)}</div>
+      <div id="sw-time" class="text-6xl @max-[260px]:text-3xl font-bold tabular-nums tracking-tight">${fmtSW(el)}</div>
     </div>
-    <div class="flex gap-3 w-full max-w-xs max-[280px]:flex-col">
+    <div class="flex gap-3 w-full max-w-xs @max-[260px]:flex-col">
       ${running
         ? html`<button id="sw-lap" class="btn btn-lg flex-1 rounded-2xl bg-base-200" onClick=${lap}>${Icon("lucide:flag")}${T(t, "lap")}</button>
             <button id="sw-stop" class="btn btn-lg flex-1 rounded-2xl btn-warning" onClick=${pause}>${Icon("lucide:pause")}${T(t, "pause")}</button>`
@@ -75,16 +75,16 @@ function TimerView({ t }) {
   const adjust = (sec) => { const ms = Math.max(10000, Math.min(5999000, rem + sec * 1000)); setTarget(ms); setRem(ms); setDone(false); haptic.tick(); };
 
   const idle = !running && !done;
-  return html`<div class="flex flex-col items-center" style="min-height:calc(100dvh - 8.5rem)">
+  return html`<div class="flex flex-col items-center @container" style="min-height:calc(100dvh - 8.5rem)">
     <div class="flex-1 flex flex-col items-center justify-center gap-2 w-full">
-      <div id="tm-time" class=${`text-7xl max-[280px]:text-4xl font-bold tabular-nums ${done ? "text-success" : ""}`}>${fmtT(rem)}</div>
+      <div id="tm-time" class=${`text-7xl @max-[260px]:text-3xl font-bold tabular-nums ${done ? "text-success" : ""}`}>${fmtT(rem)}</div>
       ${done ? html`<div id="tm-done" class="text-success font-semibold text-lg">${T(t, "done")}</div>` : null}
     </div>
     ${idle ? html`<div class="w-full max-w-xs flex flex-col gap-3 mb-4">
       <div class="flex gap-2 justify-center flex-wrap">${PRESETS.map((p) => html`<button class=${`btn btn-sm rounded-xl ${target === p * 1000 ? "btn-primary" : "bg-base-200"}`} onClick=${() => setPreset(p)} key=${p}>${fmtT(p * 1000)}</button>`)}</div>
       <div class="flex gap-2 justify-center flex-wrap">${ADJ.map(([sec, lab]) => html`<button class="btn btn-sm rounded-xl bg-base-200 tabular-nums" onClick=${() => adjust(sec)} key=${lab}>${lab}</button>`)}</div>
     </div>` : null}
-    <div class="flex gap-3 w-full max-w-xs max-[280px]:flex-col">
+    <div class="flex gap-3 w-full max-w-xs @max-[260px]:flex-col">
       ${running
         ? html`<button id="tm-stop" class="btn btn-lg flex-1 rounded-2xl btn-warning" onClick=${pause}>${Icon("lucide:pause")}${T(t, "pause")}</button>`
         : html`<button id="tm-reset" class="btn btn-lg flex-1 rounded-2xl bg-base-200" onClick=${reset}>${Icon("lucide:rotate-ccw")}${T(t, "reset")}</button>
