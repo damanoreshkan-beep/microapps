@@ -13,15 +13,29 @@
     ]
   },
   "profile": { "icon": "lucide:globe", "theme": true, "lang": true, "install": true, "source": { "label": "profSource", "url": "https://github.com/mledoze/countries", "icon": "lucide:database" } },
+  "detail": {
+    "image": "flag", "imageFit": "contain", "title": "name", "subtitle": "official",
+    "rows": [
+      { "icon": "lucide:building-2", "label": "dCapital", "field": "capital" },
+      { "icon": "lucide:globe", "label": "dRegion", "field": "regionFull" },
+      { "icon": "lucide:expand", "label": "dArea", "field": "area" },
+      { "icon": "lucide:languages", "label": "dLanguages", "field": "languages" },
+      { "icon": "lucide:coins", "label": "dCurrencies", "field": "currencies" },
+      { "icon": "lucide:phone", "label": "dCalling", "field": "calling" },
+      { "icon": "lucide:at-sign", "label": "dTld", "field": "tld" },
+      { "icon": "lucide:map", "label": "dBorders", "field": "borders" }
+    ],
+    "actions": [{ "icon": "lucide:map-pin", "label": "mapLink", "href": "map" }]
+  },
   "tabs": [
     {
       "id": "feed", "type": "list", "icon": "lucide:globe", "label": "tabFeed", "search": true, "statusKey": "status", "searchKey": "search",
-      "card": { "layout": "feed", "image": "flag", "imageFit": "contain", "href": "map", "title": "name", "subtitle": "capital", "more": "more", "meta": "area", "badges": [{ "field": "region", "icon": "lucide:map-pin", "variant": "ghost" }] }
+      "card": { "layout": "feed", "image": "flag", "imageFit": "contain", "title": "name", "subtitle": "capital", "more": "more", "meta": "area", "badges": [{ "field": "region", "icon": "lucide:map-pin", "variant": "ghost" }] }
     },
     {
       "id": "saved", "type": "list", "icon": "lucide:bookmark", "label": "tabSaved", "source": "fav", "searchKey": "search",
       "empty": { "icon": "lucide:bookmark", "text": "emptySaved", "hint": "emptySavedHint" },
-      "card": { "layout": "feed", "image": "flag", "imageFit": "contain", "href": "map", "title": "name", "subtitle": "capital", "badges": [{ "field": "region", "icon": "lucide:map-pin", "variant": "ghost" }] }
+      "card": { "layout": "feed", "image": "flag", "imageFit": "contain", "title": "name", "subtitle": "capital", "badges": [{ "field": "region", "icon": "lucide:map-pin", "variant": "ghost" }] }
     },
     { "id": "me", "type": "profile", "icon": "lucide:user", "label": "tabMe", "titleKey": "tabMe" }
   ],
@@ -34,11 +48,13 @@
       "install": "Встановити застосунок", "installTitle": "Встановлення", "installBtn": "Встановити", "installDesc": "Працює офлайн, відкривається як застосунок",
       "installIosHint": "У Safari: «Поділитися» → «На початковий екран».", "installGenericHint": "У меню браузера обери «Встановити».",
       "title": "Країни світу", "tabFeed": "Країни", "tabSaved": "Збережені", "tabMe": "Я",
-      "search": "Пошук країни…", "status": "Країн: {total}", "more": "На карті",
+      "search": "Пошук країни…", "status": "Країн: {total}", "more": "Докладніше",
       "savedCount": "Збережено: {n}", "emptySaved": "Поки порожньо", "emptySavedHint": "Додавай країни через закладку",
       "noResults": "Нічого не знайдено", "noResultsHint": "Спробуй іншу назву",
       "ariaFilter": "Фільтр за регіоном", "filterTitle": "Регіон", "apply": "Готово", "filterRegion": "Регіон",
-      "regAll": "Усі", "regEurope": "Європа", "regAsia": "Азія", "regAfrica": "Африка", "regAmericas": "Америка", "regOceania": "Океанія"
+      "regAll": "Усі", "regEurope": "Європа", "regAsia": "Азія", "regAfrica": "Африка", "regAmericas": "Америка", "regOceania": "Океанія",
+      "back": "Назад", "mapLink": "Показати на карті",
+      "dCapital": "Столиця", "dRegion": "Регіон", "dArea": "Площа", "dLanguages": "Мови", "dCurrencies": "Валюта", "dCalling": "Телефонний код", "dTld": "Домен", "dBorders": "Сусіди"
     },
     "en": {
       "close": "Close", "refresh": "Refresh", "toastSaved": "Saved", "toastRemoved": "Removed",
@@ -48,11 +64,13 @@
       "install": "Install app", "installTitle": "Install", "installBtn": "Install", "installDesc": "Works offline, opens like an app",
       "installIosHint": "In Safari: Share → 'Add to Home Screen'.", "installGenericHint": "In your browser menu choose 'Install'.",
       "title": "Countries", "tabFeed": "Countries", "tabSaved": "Saved", "tabMe": "Me",
-      "search": "Search country…", "status": "Countries: {total}", "more": "Map",
+      "search": "Search country…", "status": "Countries: {total}", "more": "Details",
       "savedCount": "Saved: {n}", "emptySaved": "Nothing yet", "emptySavedHint": "Add countries via bookmark",
       "noResults": "Nothing found", "noResultsHint": "Try another name",
       "ariaFilter": "Filter by region", "filterTitle": "Region", "apply": "Done", "filterRegion": "Region",
-      "regAll": "All", "regEurope": "Europe", "regAsia": "Asia", "regAfrica": "Africa", "regAmericas": "Americas", "regOceania": "Oceania"
+      "regAll": "All", "regEurope": "Europe", "regAsia": "Asia", "regAfrica": "Africa", "regAmericas": "Americas", "regOceania": "Oceania",
+      "back": "Back", "mapLink": "Show on map",
+      "dCapital": "Capital", "dRegion": "Region", "dArea": "Area", "dLanguages": "Languages", "dCurrencies": "Currency", "dCalling": "Calling code", "dTld": "Domain", "dBorders": "Neighbors"
     }
   }
 }
