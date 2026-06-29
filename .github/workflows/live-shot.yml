@@ -1,0 +1,54 @@
+name: live-shot
+
+# On-demand: screenshot the LIVE deployed URLs (Pages) via CI Chromium and upload as an artifact,
+# so the deployment can be reviewed by eye end-to-end (runtime resolution + proxy fetch on the real host).
+#   gh workflow run live-shot.yml -f urls="https://…/microapps/ https://…/microapps/air/"
+
+on:
+  workflow_dispatch:
+    inputs:
+      urls:
+        description: "space-separated live URLs to screenshot"
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  shot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          token: ${{ secrets.SKILL_TOKEN }}
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - uses: browser-actions/setup-chrome@v1
+        id: chrome
+        with:
+          chrome-version: stable
+      - run: sudo apt-get update && sudo apt-get install -y xvfb fonts-liberation
+      - name: Screenshot the live URLs
+        env:
+          DISPLAY: ":99"
+          DISPLAY_NUM: "99"
+          CHROMIUM_PATH: ${{ steps.chrome.outputs.chrome-path }}
+        run: |
+          deno task -c skill/harness/deno.json setup
+          mkdir -p _live
+          i=0
+          for u in ${{ inputs.urls }}; do
+            i=$((i+1))
+            name=$(echo "$u" | sed -E 's#https?://##; s#[/.]#_#g')
+            echo "shot $i: $u"
+            deno task -c skill/harness/deno.json shot "$u" "$GITHUB_WORKSPACE/_live/$i-$name.png" \
+              --width 384 --height 832 --settle 6000 || echo "  failed: $u"
+          done
+          ls -la _live
+      - uses: actions/upload-artifact@v4
+        with:
+          name: live
+          path: _live/*.png
+          if-no-files-found: warn
