@@ -14,6 +14,7 @@ Micro mobile PWAs built on **nanoai2ui** (the spec-driven runtime, served at `/_
 | Hacker News | `hn/` | list + filters | Algolia HN | `badge.icon` |
 | GitHub Trending | `gh/` | list + filters | GitHub Search | `card.trend`/chips |
 | Галерея мистецтва | `art/` | media gallery | The Met | `card.image` |
+| Погода | `weather/` | dashboard (hero) | Open-Meteo | `dashboard` tab |
 | (hand-coded ref) | `nbu-rates/` | — | bank.gov.ua | n/a |
 
 ## Dev

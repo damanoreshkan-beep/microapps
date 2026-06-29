@@ -1,0 +1,57 @@
+{
+  "id": "weather",
+  "theme": "dim",
+  "filters": {
+    "refetch": true,
+    "defaults": { "city": "kyiv" },
+    "controls": [
+      {
+        "type": "segment", "key": "city", "label": "filterCity", "icon": "lucide:map-pin", "chip": true,
+        "options": [["kyiv", "cKyiv"], ["lviv", "cLviv"], ["odesa", "cOdesa"], ["kharkiv", "cKharkiv"], ["dnipro", "cDnipro"]]
+      }
+    ]
+  },
+  "profile": { "icon": "lucide:cloud-sun", "theme": true, "lang": true, "install": true, "source": { "label": "profSource", "url": "https://open-meteo.com/", "icon": "lucide:database" } },
+  "tabs": [
+    {
+      "id": "now", "type": "dashboard", "icon": "lucide:sun", "label": "dockNow", "titleKey": "title",
+      "hero": {
+        "place": "place", "icon": "icon", "value": "temp", "unit": "°", "caption": "summary",
+        "metrics": [
+          { "icon": "lucide:thermometer", "field": "feels", "unit": "°", "label": "mFeels" },
+          { "icon": "lucide:wind", "field": "wind", "unit": " км/г", "label": "mWind" },
+          { "icon": "lucide:droplets", "field": "humidity", "unit": "%", "label": "mHumidity" }
+        ]
+      },
+      "strip": { "from": "hourly", "label": "stripHourly", "time": "time", "icon": "icon", "value": "temp" },
+      "days": { "label": "daysTitle", "day": "day", "icon": "icon", "hi": "hi", "lo": "lo", "unit": "°" }
+    },
+    { "id": "me", "type": "profile", "icon": "lucide:settings", "label": "dockProfile", "titleKey": "dockProfile" }
+  ],
+  "i18n": {
+    "uk": {
+      "title": "Погода", "dockNow": "Зараз", "dockProfile": "Налаштування",
+      "stripHourly": "Погодинно", "daysTitle": "На тиждень",
+      "mFeels": "Відчувається", "mWind": "Вітер", "mHumidity": "Вологість",
+      "filterCity": "Місто", "cKyiv": "Київ", "cLviv": "Львів", "cOdesa": "Одеса", "cKharkiv": "Харків", "cDnipro": "Дніпро",
+      "ariaFilter": "Вибрати місто", "filterTitle": "Місто", "apply": "Готово",
+      "statusError": "Дані недоступні", "errorHint": "Перевір зʼєднання та онови",
+      "profTheme": "Темна тема", "profLang": "Мова", "profTagline": "Прогноз погоди · Open-Meteo", "profSource": "Джерело — open-meteo.com",
+      "install": "Встановити застосунок", "installTitle": "Встановлення", "installBtn": "Встановити", "installDesc": "Працює офлайн, відкривається як застосунок",
+      "installIosHint": "У Safari: натисни «Поділитися», далі «На початковий екран».", "installGenericHint": "У меню браузера обери «Встановити» або «Додати на головний екран».",
+      "close": "Закрити", "refresh": "Оновити", "toastSaved": "Збережено", "toastRemoved": "Прибрано"
+    },
+    "en": {
+      "title": "Weather", "dockNow": "Now", "dockProfile": "Settings",
+      "stripHourly": "Hourly", "daysTitle": "This week",
+      "mFeels": "Feels like", "mWind": "Wind", "mHumidity": "Humidity",
+      "filterCity": "City", "cKyiv": "Kyiv", "cLviv": "Lviv", "cOdesa": "Odesa", "cKharkiv": "Kharkiv", "cDnipro": "Dnipro",
+      "ariaFilter": "Choose city", "filterTitle": "City", "apply": "Done",
+      "statusError": "Data unavailable", "errorHint": "Check your connection and refresh",
+      "profTheme": "Dark theme", "profLang": "Language", "profTagline": "Weather forecast · Open-Meteo", "profSource": "Source — open-meteo.com",
+      "install": "Install app", "installTitle": "Install", "installBtn": "Install", "installDesc": "Works offline, opens like an app",
+      "installIosHint": "In Safari: tap Share, then 'Add to Home Screen'.", "installGenericHint": "In your browser menu choose 'Install' or 'Add to Home Screen'.",
+      "close": "Close", "refresh": "Refresh", "toastSaved": "Saved", "toastRemoved": "Removed"
+    }
+  }
+}
