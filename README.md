@@ -2,7 +2,7 @@
 
 <!-- CATALOG:START -->
 
-**[🚀 Портал — усі застосунки](https://damanoreshkan-beep.github.io/microapps/)** · 16 мікроапок · працюють офлайн (PWA)
+**[🚀 Портал — усі застосунки](https://damanoreshkan-beep.github.io/microapps/)** · 17 мікроапок · працюють офлайн (PWA)
 
 | Застосунок | Опис |
 |---|---|
@@ -15,6 +15,7 @@
 | **[Ліхтарик](https://damanoreshkan-beep.github.io/microapps/flashlight/)** | Ліхтарик · торч камери або екран + SOS |
 | **[Навігатор](https://damanoreshkan-beep.github.io/microapps/navigator/)** | Стрілка завжди вкаже напрям до точки |
 | **[Погода](https://damanoreshkan-beep.github.io/microapps/weather/)** | Прогноз погоди · Open-Meteo |
+| **[Секундомір](https://damanoreshkan-beep.github.io/microapps/timer/)** | Секундомір і таймер · біп + вібрація |
 | **[Сигналізація](https://damanoreshkan-beep.github.io/microapps/alarm/)** | Тривога на рух телефону · акселерометр |
 | **[Шумомір](https://damanoreshkan-beep.github.io/microapps/noise/)** | Рівень шуму через мікрофон · приблизно |
 | **[Якість повітря](https://damanoreshkan-beep.github.io/microapps/air/)** | Європейський індекс якості повітря · Open-Meteo |
