@@ -23,6 +23,7 @@ Micro mobile PWAs built on **nanoai2ui** (the spec-driven runtime, served at `/_
 | Камера | `camera/` | tool (sensor) | camera | `sensors.js` camera; CSS-filter presets |
 | QR-сканер | `qr/` | tool (sensor) | camera + BarcodeDetector | reuses camera; jsQR fallback |
 | Ліхтарик | `flashlight/` | tool (sensor) | camera torch | `sensors.js` torch + wakeLock; screen-light + SOS fallback |
+| Якість повітря | `air/` | dashboard | Open-Meteo Air Quality | EAQI hero + bands; mirrors `weather` |
 | (hand-coded ref) | `nbu-rates/` | — | bank.gov.ua | n/a |
 
 ## Dev
