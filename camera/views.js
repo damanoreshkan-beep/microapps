@@ -24,6 +24,7 @@ const presetIdx = persistentAtom("camera:preset", "0");
 const MOCK_IMG = "https://picsum.photos/id/64/720/1280";
 const dist = (ts) => Math.hypot(ts[0].clientX - ts[1].clientX, ts[0].clientY - ts[1].clientY);
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const fname = () => { const d = new Date(), p = (n) => String(n).padStart(2, "0"); return `photo-${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}.jpg`; };
 
 export function CamView({ t, toast }) {
   const stream = useStore(camera.stream), perm = useStore(camera.permission);
@@ -61,17 +62,24 @@ export function CamView({ t, toast }) {
   };
   const onTouchEnd = (e) => { if (e.touches.length < 2) pinch.current = null; };
 
-  const capture = () => {
-    const v = videoRef.current; if (!v?.videoWidth) return;
-    const vw = v.videoWidth, vh = v.videoHeight;
+  const capture = async () => {
+    const v = videoRef.current; const track = camera.track;
+    // prefer ImageCapture.takePhoto() — full sensor resolution (sharp), not the lower video frame
+    let bitmap = null;
+    if (track && typeof window !== "undefined" && "ImageCapture" in window) {
+      try { bitmap = await createImageBitmap(await new window.ImageCapture(track).takePhoto()); } catch { bitmap = null; }
+    }
+    const src = bitmap || v; const iw = bitmap ? bitmap.width : v?.videoWidth, ih = bitmap ? bitmap.height : v?.videoHeight;
+    if (!iw) return;
     const dz = hwZoom() ? 1 : zoom;                 // digital crop only when zoom isn't done by the sensor
-    const sw = vw / dz, sh = vh / dz, sx = (vw - sw) / 2, sy = (vh - sh) / 2;
-    const c = document.createElement("canvas"); c.width = vw; c.height = vh;
+    const sw = iw / dz, sh = ih / dz, sx = (iw - sw) / 2, sy = (ih - sh) / 2;
+    const c = document.createElement("canvas"); c.width = iw; c.height = ih;
     const x = c.getContext("2d");
-    if (camera.facing === "user") { x.translate(vw, 0); x.scale(-1, 1); }
+    if (camera.facing === "user") { x.translate(iw, 0); x.scale(-1, 1); }
     x.filter = cssFilter;
-    x.drawImage(v, sx, sy, sw, sh, 0, 0, vw, vh);
-    c.toBlob((b) => { if (b) { setShot(URL.createObjectURL(b)); haptic.ok(); } }, "image/jpeg", 0.92);
+    x.drawImage(src, sx, sy, sw, sh, 0, 0, iw, ih);
+    bitmap?.close?.();
+    c.toBlob((b) => { if (b) { setShot({ url: URL.createObjectURL(b), name: fname() }); haptic.ok(); } }, "image/jpeg", 0.95);
   };
 
   // video transform: mirror front + digital zoom (skip scale when hardware-zoomed)
@@ -81,7 +89,7 @@ export function CamView({ t, toast }) {
   const aspect = dim ? `${dim.w}/${dim.h}` : "3/4";
 
   let inner;
-  if (shot) inner = html`<img src=${shot} class="w-full h-full object-contain" alt="" />`;
+  if (shot) inner = html`<img src=${shot.url} class="w-full h-full object-contain" alt="" />`;
   else if (!active) inner = html`<div class="absolute inset-0 flex flex-col items-center justify-center text-center gap-3 px-8 text-base-content">
     ${!secure ? html`${Icon("lucide:shield-alert", "text-5xl text-warning/80")}<div class="font-medium">${T(t, "secureNeeded")}</div><div class="text-sm text-base-content/70">${T(t, "secureHint")}</div>`
       : !camera.supported ? html`${Icon("lucide:camera-off", "text-5xl text-base-content/60")}<div class="font-medium">${T(t, "noCam")}</div><div class="text-sm text-base-content/70">${T(t, "noCamHint")}</div>`
@@ -111,7 +119,7 @@ export function CamView({ t, toast }) {
     <div class="flex items-center justify-center gap-4 h-16">
       ${shot
         ? html`<button class="btn btn-ghost rounded-2xl gap-2" onClick=${() => setShot(null)}>${Icon("lucide:rotate-ccw")}${T(t, "retake")}</button>
-            <a href=${shot} download="photo.jpg" class="btn btn-primary rounded-2xl gap-2" onClick=${() => { haptic.ok(); toast(T(t, "saved")); }}>${Icon("lucide:download")}${T(t, "save")}</a>`
+            <a href=${shot.url} download=${shot.name} class="btn btn-primary rounded-2xl gap-2" onClick=${() => { haptic.ok(); toast(T(t, "saved")); }}>${Icon("lucide:download")}${T(t, "save")}</a>`
         : html`<button id="cam-capture" class=${`btn btn-circle w-16 h-16 ${active && stream && ready ? "btn-primary" : "btn-disabled"}`} aria-label=${T(t, "capture")} onClick=${capture}>${Icon("lucide:circle", "text-3xl")}</button>`}
     </div>
   </div>`;
