@@ -7,8 +7,8 @@ name: verify
 
 on:
   push:
-    branches: [main, "**"]
   pull_request:
+  workflow_dispatch:
 
 concurrency:
   group: verify-${{ github.ref }}
