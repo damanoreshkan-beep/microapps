@@ -39,6 +39,7 @@ H=~/.claude/skills/microapp/harness/deno.json
 # build the app, then validate WITHOUT a browser:
 deno eval 'import {validateSpec} from "file://'$PWD'/skill/runtime/validate.js"; …'  # spec ok ✓
 deno check  /root/microapps/<app>/*.js
+deno test --allow-read skill/runtime flashlight   # fast pure-logic tests (geo/Morse/dB), no browser
 deno task -c $H serve /root/microapps/<app> 8095   # eyeball locally (serve is fine; no Chromium)
 git add -A && git commit -m "…" && git push        # → CI runs verify; gh run watch
 ```

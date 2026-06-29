@@ -32,6 +32,9 @@ jobs:
         with:
           deno-version: v2.x
 
+      - name: Unit tests (pure logic, no browser — fails fast before the gate)
+        run: deno test --allow-read skill/runtime flashlight
+
       - name: Install Chrome
         id: chrome
         uses: browser-actions/setup-chrome@v1
