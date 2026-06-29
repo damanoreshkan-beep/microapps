@@ -16,15 +16,15 @@
     {
       "id": "now", "type": "dashboard", "icon": "lucide:wind", "label": "dockNow", "titleKey": "title",
       "hero": {
-        "place": "place", "icon": "icon", "value": "aqi", "unit": "", "caption": "band",
+        "place": "place", "icon": "icon", "value": "aqi", "unit": "", "caption": "band", "tone": "tone",
         "metrics": [
           { "icon": "lucide:circle-dot", "field": "pm25", "unit": "", "label": "mPm25" },
           { "icon": "lucide:circle", "field": "pm10", "unit": "", "label": "mPm10" },
           { "icon": "lucide:sun", "field": "o3", "unit": "", "label": "mO3" }
         ]
       },
-      "strip": { "from": "hourly", "label": "stripHourly", "time": "time", "icon": "icon", "value": "aqi" },
-      "days": { "label": "daysTitle", "day": "day", "icon": "icon", "hi": "hi", "lo": "lo", "unit": "" }
+      "strip": { "from": "hourly", "label": "stripHourly", "time": "time", "value": "aqi", "tone": "tone" },
+      "days": { "label": "daysTitle", "day": "day", "hi": "hi", "lo": "lo", "unit": "", "tone": "tone" }
     },
     { "id": "me", "type": "profile", "icon": "lucide:settings", "label": "dockProfile", "titleKey": "dockProfile" }
   ],
