@@ -97,4 +97,3 @@ jobs:
             */states/main.png
             */states/last.png
           if-no-files-found: warn
-          if-no-files-found: warn
