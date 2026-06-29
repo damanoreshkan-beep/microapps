@@ -26,7 +26,17 @@ export default [
       h.expect(/Столиця/.test(t) && /Мови|Валюта/.test(t), "немає розширених фактів");
       h.expect(/^https:\/\//.test(await h.attr('[role="dialog"] a[href]', "href")), "немає дії-посилання (карта)");
       await h.click("#detail-back"); await h.wait(200);
-      h.expect((await h.count('[role="dialog"]')) === 0, "деталі не закрились");
+      h.expect((await h.count('[role="dialog"]')) === 0, "деталі не закрились кнопкою «Назад»");
+    },
+  },
+  {
+    name: "роутинг: апаратний Back закриває деталі (не виходить з апки)", run: async (h) => {
+      for (let i = 0; i < 24 && (await h.count(".card")) === 0; i++) await h.wait(500);
+      await h.click(".aw-tap"); await h.wait(250);
+      h.expect((await h.count('[role="dialog"]')) === 1, "деталі не відкрились");
+      await h.back(); await h.wait(250);                          // hardware/browser Back
+      h.expect((await h.count('[role="dialog"]')) === 0, "Back не закрив деталі");
+      h.expect((await h.count(".card")) > 30, "Back вийшов зі списку (втрата стану)");
     },
   },
   { name: "i18n EN/UA", run: async (h) => { await h.click('[data-tab="me"]'); await h.wait(150); await h.click('[data-loc="en"]'); await h.wait(250); h.expect(/Language|Countries|Region/.test(await h.bodyText()), "не EN"); await h.click('[data-loc="uk"]'); await h.wait(200); await h.click('[data-tab="feed"]'); await h.wait(120); } },
