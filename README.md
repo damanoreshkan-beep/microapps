@@ -19,22 +19,31 @@ Micro mobile PWAs built on **nanoai2ui** (the spec-driven runtime, served at `/_
 
 ## Dev
 
+> Pass **absolute** appdirs — `deno task` runs with cwd = the harness dir, so a relative
+> `microapps/x` resolves under the harness, not here.
+
 ```sh
 H=~/.claude/skills/microapp/harness/deno.json
-deno task -c $H setup                 # Xvfb (once per session)
-deno task -c $H serve  microapps/hn 8095
-deno task -c $H e2e    microapps/hn   # functional gate
-deno task -c $H check  microapps/hn   # a11y + overflow + watch-glance
-deno task -c $H shot   microapps/hn out.png --device s25ultra --wait .card --settle 4500
+deno task -c $H setup                          # Xvfb (once per session; auto-restarts if it dies)
+deno task -c $H verify    /root/microapps/hn   # FAST: e2e + design in one browser (use this)
+deno task -c $H verify    /root/microapps/hn --shots   # + writes states/{main,last}.png
+deno task -c $H check-all  /root/microapps     # regression: verify EVERY app (run after runtime edits)
+deno task -c $H probe "<url>"                   # vet a data source before building on it
+deno task -c $H serve     /root/microapps/hn 8095      # dev server (+/feed proxy)
+# granular gates still exist: e2e · check · shot
 ```
 
 ## Add a new app
 
 ```sh
-deno task -c $H new microapps/<name> "<Title>"   # scaffolds index.html, sw.js, manifest, brand
-# then write ONLY: spec.json, data.js, e2e.spec.mjs, brand.svg
-deno task -c $H icons microapps/<name>
+# fastest: scaffold a whole family — green under `verify` out of the box, then swap the data stub
+deno task -c $H new /root/microapps/<name> "<Title>" dim "#1c212b" --family dashboard
+deno task -c $H icons  /root/microapps/<name>
+deno task -c $H verify /root/microapps/<name>          # confirm green, then wire the real source
+# (omit --family to scaffold only the shell and hand-write spec.json/data.js/e2e.spec.mjs)
 ```
 
-Read `~/.claude/skills/microapp/runtime/SCHEMA.md` before writing `spec.json`. Shared `data.js`
-fetching goes through `import { viaProxy, isJsonArray, isJsonObject } from "/_rt/feed.js"`.
+Families: `list` · `converter` · `dashboard` · `gallery`. Read
+`~/.claude/skills/microapp/runtime/SCHEMA.md` before editing `spec.json`. Shared `data.js`
+fetching goes through `import { viaProxy, isJsonArray, isJsonObject } from "/_rt/feed.js"` —
+**probe the URL first**.
