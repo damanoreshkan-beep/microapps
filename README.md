@@ -21,6 +21,8 @@ Micro mobile PWAs built on **nanoai2ui** (the spec-driven runtime, served at `/_
 | Шумомір | `noise/` | tool (sensor) | microphone | `sensors.js` mic (approx dB) |
 | Сигналізація | `alarm/` | tool (sensor) | accelerometer | `sensors.js` motion + wakeLock |
 | Камера | `camera/` | tool (sensor) | camera | `sensors.js` camera; CSS-filter presets |
+| QR-сканер | `qr/` | tool (sensor) | camera + BarcodeDetector | reuses camera; jsQR fallback |
+| Камера | `camera/` | tool (sensor) | camera | `sensors.js` camera; CSS-filter presets |
 | (hand-coded ref) | `nbu-rates/` | — | bank.gov.ua | n/a |
 
 ## Dev

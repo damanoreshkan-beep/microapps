@@ -1,0 +1,39 @@
+{
+  "id": "qr",
+  "theme": "dim",
+  "profile": { "icon": "lucide:qr-code", "theme": true, "lang": true, "install": true },
+  "tabs": [
+    { "id": "scan", "type": "tool", "view": "scan", "needs": ["camera"], "icon": "lucide:scan-line", "label": "tabScan", "titleKey": "title" },
+    { "id": "me", "type": "profile", "icon": "lucide:settings", "label": "tabMe", "titleKey": "tabMe" }
+  ],
+  "i18n": {
+    "uk": {
+      "title": "QR-сканер", "tabScan": "Сканер", "tabMe": "Налаштування",
+      "enableCam": "Увімкнути камеру", "camHint": "Дозволь доступ до камери, щоб сканувати коди",
+      "camDenied": "Доступ до камери заборонено", "camDeniedHint": "Іконка зліва від адреси → Камера → «Дозволити», онови",
+      "noCam": "Камера недоступна", "noCamHint": "Пристрій не підтримує камеру в браузері",
+      "secureNeeded": "Потрібне безпечне зʼєднання", "secureHint": "Камера працює лише на https або localhost. Відкрий через localhost, не за IP.",
+      "scanHint": "Наведи камеру на QR або штрих-код",
+      "open": "Відкрити", "copy": "Копіювати", "copied": "Скопійовано", "scanAgain": "Сканувати ще", "flip": "Перемкнути камеру",
+      "history": "Історія", "historyTitle": "Історія сканувань", "noHistory": "Поки порожньо", "clear": "Очистити",
+      "profTheme": "Темна тема", "profLang": "Мова", "profTagline": "Сканер QR і штрих-кодів · нативний BarcodeDetector",
+      "install": "Встановити застосунок", "installTitle": "Встановлення", "installBtn": "Встановити", "installDesc": "Працює офлайн, відкривається як застосунок",
+      "installIosHint": "У Safari: «Поділитися» → «На початковий екран».", "installGenericHint": "У меню браузера обери «Встановити».",
+      "close": "Закрити", "refresh": "Оновити", "back": "Назад", "toastSaved": "Збережено", "toastRemoved": "Прибрано"
+    },
+    "en": {
+      "title": "QR scanner", "tabScan": "Scanner", "tabMe": "Settings",
+      "enableCam": "Enable camera", "camHint": "Allow camera access to scan codes",
+      "camDenied": "Camera access denied", "camDeniedHint": "Icon left of the address bar → Camera → 'Allow', reload",
+      "noCam": "Camera unavailable", "noCamHint": "This device has no browser camera",
+      "secureNeeded": "Secure connection required", "secureHint": "The camera only works on https or localhost. Open via localhost, not an IP.",
+      "scanHint": "Point the camera at a QR or barcode",
+      "open": "Open", "copy": "Copy", "copied": "Copied", "scanAgain": "Scan again", "flip": "Switch camera",
+      "history": "History", "historyTitle": "Scan history", "noHistory": "Nothing yet", "clear": "Clear",
+      "profTheme": "Dark theme", "profLang": "Language", "profTagline": "QR & barcode scanner · native BarcodeDetector",
+      "install": "Install app", "installTitle": "Install", "installBtn": "Install", "installDesc": "Works offline, opens like an app",
+      "installIosHint": "In Safari: Share → 'Add to Home Screen'.", "installGenericHint": "In your browser menu choose 'Install'.",
+      "close": "Close", "refresh": "Refresh", "back": "Back", "toastSaved": "Saved", "toastRemoved": "Removed"
+    }
+  }
+}
