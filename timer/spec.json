@@ -1,0 +1,28 @@
+{
+  "id": "timer",
+  "theme": "dim",
+  "profile": { "icon": "lucide:timer", "theme": true, "lang": true, "install": true },
+  "tabs": [
+    { "id": "stopwatch", "type": "tool", "view": "stopwatch", "needs": ["wakeLock"], "icon": "lucide:timer", "label": "tabStopwatch", "titleKey": "tabStopwatch" },
+    { "id": "timer", "type": "tool", "view": "timer", "needs": ["wakeLock"], "icon": "lucide:hourglass", "label": "tabTimer", "titleKey": "tabTimer" },
+    { "id": "me", "type": "profile", "icon": "lucide:settings", "label": "tabMe", "titleKey": "tabMe" }
+  ],
+  "i18n": {
+    "uk": {
+      "title": "Таймер", "tabStopwatch": "Секундомір", "tabTimer": "Таймер", "tabMe": "Налаштування",
+      "start": "Старт", "pause": "Пауза", "reset": "Скинути", "lap": "Коло", "done": "Готово!",
+      "profTheme": "Темна тема", "profLang": "Мова", "profTagline": "Секундомір і таймер · біп + вібрація",
+      "install": "Встановити застосунок", "installTitle": "Встановлення", "installBtn": "Встановити", "installDesc": "Працює офлайн, відкривається як застосунок",
+      "installIosHint": "У Safari: «Поділитися» → «На початковий екран».", "installGenericHint": "У меню браузера обери «Встановити».",
+      "close": "Закрити", "refresh": "Оновити", "back": "Назад", "toastSaved": "Збережено", "toastRemoved": "Прибрано"
+    },
+    "en": {
+      "title": "Timer", "tabStopwatch": "Stopwatch", "tabTimer": "Timer", "tabMe": "Settings",
+      "start": "Start", "pause": "Pause", "reset": "Reset", "lap": "Lap", "done": "Done!",
+      "profTheme": "Dark theme", "profLang": "Language", "profTagline": "Stopwatch & timer · beep + vibration",
+      "install": "Install app", "installTitle": "Install", "installBtn": "Install", "installDesc": "Works offline, opens like an app",
+      "installIosHint": "In Safari: Share → 'Add to Home Screen'.", "installGenericHint": "In your browser menu choose 'Install'.",
+      "close": "Close", "refresh": "Refresh", "back": "Back", "toastSaved": "Saved", "toastRemoved": "Removed"
+    }
+  }
+}
