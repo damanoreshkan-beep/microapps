@@ -36,7 +36,10 @@ export function CamView({ t, toast }) {
   const mirror = camera.facing === "user" ? "transform:scaleX(-1)" : "";
 
   useEffect(() => { const v = videoRef.current; if (v && stream) { v.srcObject = stream; v.play?.().catch(() => {}); } }, [stream]);
-  useEffect(() => () => camera.stop(), []);
+  useEffect(() => {
+    try { navigator.permissions?.query?.({ name: "camera" }).then((p) => { camera.permission.set(p.state); p.onchange = () => camera.permission.set(p.state); }).catch(() => {}); } catch { /* */ }
+    return () => camera.stop();
+  }, []);
 
   const enable = async () => { if (!(await camera.start())) haptic.bump(); };
   const flip = () => camera.flip();
