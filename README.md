@@ -22,23 +22,32 @@ Micro mobile PWAs built on **nanoai2ui** (the spec-driven runtime, served at `/_
 | Сигналізація | `alarm/` | tool (sensor) | accelerometer | `sensors.js` motion + wakeLock |
 | Камера | `camera/` | tool (sensor) | camera | `sensors.js` camera; CSS-filter presets |
 | QR-сканер | `qr/` | tool (sensor) | camera + BarcodeDetector | reuses camera; jsQR fallback |
+| Ліхтарик | `flashlight/` | tool (sensor) | camera torch | `sensors.js` torch + wakeLock; screen-light + SOS fallback |
 | (hand-coded ref) | `nbu-rates/` | — | bank.gov.ua | n/a |
 
 ## Dev
 
-> Pass **absolute** appdirs — `deno task` runs with cwd = the harness dir, so a relative
-> `microapps/x` resolves under the harness, not here.
+**The gate runs in CI** (`.github/workflows/verify.yml`) — `check-all` over the whole farm on
+ubuntu-latest. Headed Chromium under the local proot/Android env crashed the terminal, so the
+browser is **off-device**. The harness+runtime come in as the `skill/` git submodule
+(`damanoreshkan-beep/microapp-skill`); `check-all` skips it (no top-level `spec.json`).
+
+Local cycle is **browser-free**:
 
 ```sh
 H=~/.claude/skills/microapp/harness/deno.json
-deno task -c $H setup                          # Xvfb (once per session; auto-restarts if it dies)
-deno task -c $H verify    /root/microapps/hn   # FAST: e2e + design in one browser (use this)
-deno task -c $H verify    /root/microapps/hn --shots   # + writes states/{main,last}.png
-deno task -c $H check-all  /root/microapps     # regression: verify EVERY app (run after runtime edits)
-deno task -c $H probe "<url>"                   # vet a data source before building on it
-deno task -c $H serve     /root/microapps/hn 8095      # dev server (+/feed proxy)
-# granular gates still exist: e2e · check · shot
+# build the app, then validate WITHOUT a browser:
+deno eval 'import {validateSpec} from "file://'$PWD'/skill/runtime/validate.js"; …'  # spec ok ✓
+deno check  /root/microapps/<app>/*.js
+deno task -c $H serve /root/microapps/<app> 8095   # eyeball locally (serve is fine; no Chromium)
+git add -A && git commit -m "…" && git push        # → CI runs verify; gh run watch
 ```
+
+> Never run `verify` / `check-all` / `icons` / `shot` / `setup` on-device — that is what crashed
+> the terminal. Push and let CI be the gate. After editing the harness/runtime, commit+push the
+> skill repo, then bump the submodule pointer here (`git -C skill pull && git add skill`).
+>
+> Pass **absolute** appdirs to any `deno task` — cwd = the harness dir.
 
 ## Add a new app
 
