@@ -5,12 +5,9 @@ import { html } from "htm/preact";
 import { useState, useEffect, useRef } from "preact/hooks";
 import { camera, haptic, wakeLock } from "/_rt/sensors.js";
 import { T } from "/_rt/core.js";
+import { SOS } from "./morse.js";
 
 const Icon = (i, c = "") => html`<iconify-icon icon=${i} class=${c}></iconify-icon>`;
-const U = 220;
-const SOS = [[1, U], [0, U], [1, U], [0, U], [1, U], [0, 3 * U],            // S
-  [1, 3 * U], [0, U], [1, 3 * U], [0, U], [1, 3 * U], [0, 3 * U],           // O
-  [1, U], [0, U], [1, U], [0, U], [1, U], [0, 7 * U]];                      // S + word gap
 
 export function LightView({ t }) {
   const mock = typeof location !== "undefined" && new URLSearchParams(location.search).has("mock");
